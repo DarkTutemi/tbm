@@ -216,137 +216,177 @@
         <!-- SVG Canvas Card -->
         <div class="canvas-card">
             <div class="svg-container">
-                <svg viewBox="0 0 960 620" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <svg viewBox="0 0 1020 620" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                     <!-- Background Grid -->
                     <defs>
-                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1e293b" stroke-width="0.5"/>
-                        </pattern>
+                      <pattern id="gridBk" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+                      </pattern>
                     </defs>
-                    <rect width="960" height="620" fill="url(#grid)" />
+                    <rect width="1020" height="620" fill="url(#gridBk)" />
 
-                    <!-- Main Outer Housing Shell -->
-                    <rect x="120" y="80" width="680" height="440" rx="20" fill="#0f172a" stroke="#334155" stroke-width="3" />
-                    <text x="140" y="110" fill="#64748b" font-size="14" font-weight="bold">THÂN ĐẦU KHIÊN (DRILLING HEAD SHELL =bk)</text>
+                    <!-- Main Outer Housing Shell (=bk) -->
+                    <rect x="110" y="75" width="600" height="450" rx="16" fill="#0f172a" stroke="#334155" stroke-width="3" />
+                    <text x="130" y="105" fill="#64748b" font-size="13" font-weight="bold">THÂN ĐẦU KHIÊN (DRILLING HEAD SHELL =bk)</text>
 
                     <!-- SECTION 1: CUTTER DISC (Front) -->
-                    <g class="component-node" onclick="showDetails('Cutter Disc', 'Mâm Cắt Gọt Đất Đá', '-M15.1 (132kW Motor)', 'Cảm biến đếm xung RPM -B1 (EW478) đấu về Module -K2.1', 'Cấu tạo từ thép chịu lực gắn các răng hợp kim gọt vách hầm')">
-                        <path d="M 120 120 L 170 120 L 170 480 L 120 480 Z" fill="#38bdf8" fill-opacity="0.2" stroke="#38bdf8" stroke-width="2"/>
-                        <!-- Cutter Teeth -->
-                        <polygon points="105,150 120,140 120,160" fill="#eab308"/>
-                        <polygon points="105,250 120,240 120,260" fill="#eab308"/>
-                        <polygon points="105,350 120,340 120,360" fill="#eab308"/>
-                        <polygon points="105,450 120,440 120,460" fill="#eab308"/>
-                        <text x="130" y="300" fill="#38bdf8" font-size="12" font-weight="bold" transform="rotate(-90 135 300)">ĐĨA CẮT (CUTTING DISC)</text>
+                    <g class="component-node" onclick="showDetails('Cutter Disc (-M15.1)', 'Mâm Cắt Gọt Đất Đá Schürfrad', '-M15.1 (132kW Motor) | 900V AC', 'Cảm biến đếm xung RPM -B1 (EW478/EW483) đấu về Turck -K2.1', 'Cấu tạo từ thép chịu lực gắn các răng gọt hợp kim màu vàng và đĩa cắt con lăn phá đá')">
+                      <path d="M 110 115 L 160 115 L 160 485 L 110 485 Z" fill="#38bdf8" fill-opacity="0.2" stroke="#38bdf8" stroke-width="2"/>
+                      <!-- Cutter Teeth (Răng gọt hợp kim màu vàng) -->
+                      <polygon points="95,145 110,135 110,155" fill="#eab308"/>
+                      <polygon points="95,230 110,220 110,240" fill="#eab308"/>
+                      <polygon points="95,315 110,305 110,325" fill="#eab308"/>
+                      <polygon points="95,400 110,390 110,410" fill="#eab308"/>
+                      <polygon points="95,465 110,455 110,475" fill="#eab308"/>
+                      <text x="120" y="300" fill="#38bdf8" font-size="11" font-weight="bold" transform="rotate(-90 125 300)">ĐĨA CẮT (CUTTING DISC)</text>
                     </g>
 
-                    <!-- RPM Sensor -->
-                    <g class="component-node" onclick="showDetails('RPM Sensor (-B1)', 'Cảm Biến Đếm Tốc Độ Vòng Quay Đĩa Cắt', 'Tín hiệu: EW478 / EW483', 'Module: Turck PicoNet -K2.1 (Port 1)', 'Mã mts-No.: 85086')">
-                        <circle cx="170" cy="180" r="10" fill="#a855f7"/>
-                        <text x="185" y="184" fill="#a855f7" font-size="11" font-weight="bold">RPM Sensor -B1</text>
+                    <!-- RPM Sensor -B1 -->
+                    <g class="component-node" onclick="showDetails('RPM Sensor (-B1)', 'Cảm Biến Đếm Tốc Độ Vòng Quay Đĩa Cắt', 'Tín hiệu: EW478 / EW483 (High Speed Counter)', 'Module: Turck PicoNet -K2.1 (Port 1 / DP-Adr. 30)', 'Mã mts-No.: 85086 | Đo xung điện cảm ứng từ đĩa răng trục chính')">
+                      <circle cx="160" cy="175" r="10" fill="#a855f7"/>
+                      <text x="175" y="179" fill="#a855f7" font-size="11" font-weight="bold">RPM Sensor -B1</text>
                     </g>
 
                     <!-- SECTION 2: CRUSHER CONE & SLURRY CHAMBER -->
-                    <g class="component-node" onclick="showDetails('Slurry Chamber & Crusher', 'Khoang Bùn & Nón Nghiền Đá', 'Áp suất: -B242 (EW374)', 'Dung dịch bùn Bentonite giữ ổn định mặt gương hầm', 'Nón nghiền nghiền nhỏ đá trước khi hút qua đường xả')">
-                        <path d="M 170 140 L 290 170 L 290 430 L 170 460 Z" fill="#0284c7" fill-opacity="0.15" stroke="#0284c7" stroke-width="2" stroke-dasharray="4"/>
-                        <text x="200" y="300" fill="#38bdf8" font-size="12" font-weight="bold">NÓN NGHIỀN &amp; KHOANG BÙN</text>
+                    <g class="component-node" onclick="showDetails('Slurry Chamber & Crusher', 'Khoang Bùn & Nón Nghiền Đá', 'Áp suất: -B242 (EW374 / 0-10 bar)', 'Dung dịch bùn Bentonite giữ ổn định mặt gương đào hầm', 'Nón nghiền đá tảng trước khi hút qua đường xả bùn')">
+                      <path d="M 160 135 L 280 165 L 280 435 L 160 465 Z" fill="#0284c7" fill-opacity="0.18" stroke="#0284c7" stroke-width="2" stroke-dasharray="4"/>
+                      <text x="178" y="300" fill="#38bdf8" font-size="11" font-weight="bold">NÓN NGHIỀN &amp; KHOANG BÙN</text>
                     </g>
 
-                    <!-- Camera & Lamp -->
-                    <g class="component-node" onclick="showDetails('Camera & Lamp', 'Camera IP68 & Đèn LED Chiếu Sáng', 'Camera -P10.1 (mts-No. 85077) / Lamp -E9.1', 'Nguồn 24VDC, Bộ truyền Video -B10.1 (mts-No. 30949)', 'Giám sát trực tiếp hình ảnh gương hầm hầm')">
-                        <rect x="200" y="155" width="50" height="25" rx="4" fill="#eab308" fill-opacity="0.3" stroke="#eab308"/>
-                        <text x="205" y="172" fill="#eab308" font-size="10" font-weight="bold">CAM / LAMP</text>
+                    <!-- Slurry Pressure Sensor -B242 -->
+                    <g class="component-node" onclick="showDetails('Slurry Pressure (-B242)', 'Cảm Biến Áp Lực Buồng Đào Bùn', 'EW374 / PIW374 (0-10 bar analog 4-20mA)', 'Module: Turck PicoNet -K1.1 (Port 2 / DP-Adr. 23)', 'Duy trì cân bằng áp lực đất EPB chống sạt lở hoặc trồi lún mặt đường')">
+                      <circle cx="240" cy="415" r="11" fill="#0284c7" stroke="#38bdf8" stroke-width="2"/>
+                      <text x="190" y="445" fill="#38bdf8" font-size="11" font-weight="bold">P Slurry -B242</text>
                     </g>
 
-                    <!-- Pressure Sensor Slurry Chamber -B242 -->
-                    <g class="component-node" onclick="showDetails('Slurry Pressure (-B242)', 'Cảm Biến Áp Lực Buồng Đào Bùn', 'EW374 / PIW374 (0-10 bar)', 'Module: Turck PicoNet -K1.1 (Port 2)', 'Đo áp lực cân bằng đất giữ thăng bằng gương hầm')">
-                        <circle cx="250" cy="410" r="10" fill="#0284c7"/>
-                        <text x="200" y="440" fill="#38bdf8" font-size="11" font-weight="bold">P Slurry -B242</text>
-                    </g>
-
-                    <!-- Cutter Pressure Sensor -B244 -->
+                    <!-- Cutter Pressure Sensor -B244 (MÀU ĐỎ THEO YÊU CẦU) -->
                     <g class="component-node" onclick="showDetails('Cảm Biến Áp Suất Đĩa Cắt (-B244)', 'Cảm biến đo áp suất thủy lực cấp cho động cơ quay mâm cắt.', 'EW378 / PIW378 (Dải đo 0-400 bar)', 'Trạm Turck PicoNet -K1.1 (Port 4, DP-Adr 23)', 'Giám sát tải trọng mô-men quay và tự động chống quá tải kẹt đá.')">
-                        <circle cx="250" cy="230" r="10" fill="#0284c7" stroke="#38bdf8" stroke-width="2"/>
-                        <text x="200" y="260" fill="#38bdf8" font-size="11" font-weight="bold">P Cutter -B244</text>
+                      <circle cx="240" cy="225" r="11" fill="#ef4444" stroke="#f87171" stroke-width="2.5"/>
+                      <text x="190" y="255" fill="#ef4444" font-size="11" font-weight="bold">P Cutter -B244</text>
                     </g>
 
                     <!-- SECTION 3: BYPASS & JET VALVE ASSEMBLY -->
-                    <g class="component-node" onclick="showDetails('Bypass & Jet Valves', 'Cụm Van Bùn Bypass & Jet', 'Coil: -K58/59 (Bypass), -K60/61 (Jet)', 'LS: -B62 (LS Bypass), -B64 (LS Jet)', 'Chuyển đổi linh hoạt giữa Chế độ Đi tắt, Đào chính & Xối rửa Jet')">
-                        <rect x="320" y="140" width="160" height="150" rx="8" fill="#d97706" fill-opacity="0.15" stroke="#d97706" stroke-width="2"/>
-                        <text x="335" y="165" fill="#f59e0b" font-size="12" font-weight="bold">CỤM VAN BYPASS &amp; JET</text>
-                        <!-- Bypass Valve graphic -->
-                        <rect x="340" y="180" width="120" height="35" rx="4" fill="#d97706" fill-opacity="0.4"/>
-                        <text x="350" y="202" fill="#fff" font-size="11">Van Bypass (-K58/59)</text>
-                        <!-- Jet Valve graphic -->
-                        <rect x="340" y="235" width="120" height="35" rx="4" fill="#d97706" fill-opacity="0.4"/>
-                        <text x="360" y="257" fill="#fff" font-size="11">Van Jet (-K60/61)</text>
+                    <g class="component-node" onclick="showDetails('Bypass & Jet Valves (-K58..61)', 'Cụm Van Bùn Bypass & Jet', 'Coil: -K58/59 (Bypass A52.0/1), -K60/61 (Jet A52.2/3)', 'LS: -B62 (E52.0/1), -B64 (E52.2/3)', 'Chuyển đổi linh hoạt giữa chế độ tuần hoàn ngắn mạch và xối rửa tia nước cao áp')">
+                      <rect x="305" y="135" width="155" height="150" rx="8" fill="#d97706" fill-opacity="0.15" stroke="#d97706" stroke-width="2"/>
+                      <text x="318" y="160" fill="#f59e0b" font-size="11" font-weight="bold">CỤM VAN BYPASS &amp; JET</text>
+                      <rect x="320" y="175" width="125" height="32" rx="4" fill="#d97706" fill-opacity="0.4"/>
+                      <text x="328" y="196" fill="#fff" font-size="10.5">Van Bypass (-K58/59)</text>
+                      <rect x="320" y="225" width="125" height="32" rx="4" fill="#d97706" fill-opacity="0.4"/>
+                      <text x="338" y="246" fill="#fff" font-size="10.5">Van Jet (-K60/61)</text>
                     </g>
 
                     <!-- SECTION 4: 3D STEERING CYLINDERS (120 deg apart) -->
-                    <g class="component-node" onclick="showDetails('Steering Rams (1,2,3)', 'Hệ Thống 3 Xilanh Bẻ Khớp Lái 3D', 'Solenoid: -K50 đến -K55', 'Sensors: P Steer -B54, -B55, -B56 (EW364,366,368)', 'Bẻ hướng đầu khiên chính xác theo vệt tia Laser TACS')">
-                        <!-- Cyl 1 (Top) -->
-                        <rect x="520" y="110" width="140" height="30" rx="4" fill="#ef4444" fill-opacity="0.2" stroke="#ef4444" stroke-width="2"/>
-                        <text x="530" y="130" fill="#ef4444" font-size="11" font-weight="bold">Xilanh Lái 1 (0° - Top)</text>
-                        <!-- Cyl 2 (Bottom Right) -->
-                        <rect x="520" y="320" width="140" height="30" rx="4" fill="#ef4444" fill-opacity="0.2" stroke="#ef4444" stroke-width="2"/>
-                        <text x="525" y="340" fill="#ef4444" font-size="11" font-weight="bold">Xilanh Lái 2 (120° Right)</text>
-                        <!-- Cyl 3 (Bottom Left) -->
-                        <rect x="520" y="460" width="140" height="30" rx="4" fill="#ef4444" fill-opacity="0.2" stroke="#ef4444" stroke-width="2"/>
-                        <text x="525" y="480" fill="#ef4444" font-size="11" font-weight="bold">Xilanh Lái 3 (240° Left)</text>
+                    <g class="component-node" onclick="showDetails('Steering Rams (1,2,3)', 'Hệ Thống 3 Xilanh Bẻ Khớp Lái 3D 120°', 'Solenoid: -K50 đến -K55 | Áp suất: -B54, -B55, -B56 (EW364, 366, 368)', 'Module: Turck PicoNet -K1.2 (DP-Adr. 22)', 'Bẻ hướng đầu khiên chính xác theo vệt tia Laser định vị TACS')">
+                      <!-- Cyl 1 (Top 0°) -->
+                      <rect x="490" y="105" width="135" height="28" rx="4" fill="#ef4444" fill-opacity="0.25" stroke="#ef4444" stroke-width="2"/>
+                      <text x="498" y="124" fill="#ef4444" font-size="10.5" font-weight="bold">Xilanh Lái 1 (0° Top)</text>
+                      <!-- Cyl 2 (Right 120°) -->
+                      <rect x="490" y="320" width="135" height="28" rx="4" fill="#ef4444" fill-opacity="0.25" stroke="#ef4444" stroke-width="2"/>
+                      <text x="495" y="339" fill="#ef4444" font-size="10.5" font-weight="bold">Xilanh Lái 2 (120° Phải)</text>
+                      <!-- Cyl 3 (Left 240°) -->
+                      <rect x="490" y="460" width="135" height="28" rx="4" fill="#ef4444" fill-opacity="0.25" stroke="#ef4444" stroke-width="2"/>
+                      <text x="495" y="479" fill="#ef4444" font-size="10.5" font-weight="bold">Xilanh Lái 3 (240° Trái)</text>
                     </g>
 
-                    <!-- SECTION 5: INCLINOMETER (2-Axis Pitch & Roll) -->
-                    <g class="component-node" onclick="showDetails('Inclinometer (-B57)', 'Cảm Biến Đo Góc Nghiêng 2 Trục (Pitch & Roll)', 'EW370 / PIW370 (+/- 60°)', 'Mã mts-No.: 115223 (Hãng Seika / Novotechnik)', 'Đo góc dốc trục dọc và độ xoay lật thân khiên xung quanh trục hầm')">
-                        <rect x="320" y="320" width="160" height="60" rx="8" fill="#16a34a" fill-opacity="0.2" stroke="#16a34a" stroke-width="2"/>
-                        <circle cx="350" cy="350" r="15" fill="#16a34a"/>
-                        <text x="375" y="348" fill="#4ade80" font-size="12" font-weight="bold">INCLINOMETER</text>
-                        <text x="375" y="364" fill="#94a3b8" font-size="10">-B57 (Pitch &amp; Roll)</text>
+                    <!-- SECTION 5: INCLINOMETER (-B57 Pitch & Roll) -->
+                    <g class="component-node" onclick="showDetails('Inclinometer (-B57)', 'Cảm Biến Độ Nghiêng 2 Trục (Pitch & Roll)', 'EW370 / PIW370 (+/- 60° Novotechnik/Seika)', 'Module: Turck PicoNet -K1.2 (DP-Adr. 22)', 'Đo độ dốc trục dọc (Pitch) và góc xoay lật (Roll) của thân khiên')">
+                      <rect x="305" y="315" width="155" height="60" rx="8" fill="#16a34a" fill-opacity="0.2" stroke="#16a34a" stroke-width="2"/>
+                      <circle cx="330" cy="345" r="14" fill="#16a34a"/>
+                      <text x="352" y="342" fill="#4ade80" font-size="11" font-weight="bold">INCLINOMETER</text>
+                      <text x="352" y="358" fill="#94a3b8" font-size="9.5">-B57 (Pitch &amp; Roll)</text>
                     </g>
 
                     <!-- SECTION 6: TURCK PICONET PROFIBUS IO MODULES -->
                     <g class="component-node" onclick="showDetails('Cụm Module I/O Turck PicoNet', 'Các module I/O phân tán đúc khối chuẩn chống nước IP67 thu thập toàn bộ cảm biến.', 'Mạng Profibus-DP 12Mbps / Địa chỉ DP-Adr 20 đến 30', 'Hộp phân phối chính =bk', 'Bao gồm các module: -K1.1..1.4 (AI/DO), -K2.1 (Counter), -K2.2..2.3 (DI/DO).')">
-                        <rect x="320" y="410" width="160" height="90" rx="8" fill="#a855f7" fill-opacity="0.15" stroke="#a855f7" stroke-width="2"/>
-                        <text x="330" y="432" fill="#c084fc" font-size="12" font-weight="bold">CỤM PICONET I/O</text>
-                        <text x="330" y="452" fill="#e2e8f0" font-size="10">• -K1.1..1.4: AI/DO Analog</text>
-                        <text x="330" y="468" fill="#e2e8f0" font-size="10">• -K2.2..2.3: Digital I/O</text>
-                        <text x="330" y="484" fill="#e2e8f0" font-size="10">• -K2.1: Counter Tốc Độ</text>
+                      <rect x="305" y="405" width="155" height="95" rx="8" fill="#a855f7" fill-opacity="0.18" stroke="#a855f7" stroke-width="2"/>
+                      <text x="315" y="426" fill="#c084fc" font-size="11" font-weight="bold">CỤM PICONET I/O</text>
+                      <text x="315" y="445" fill="#e2e8f0" font-size="9.5">• -K1.1..1.4: AI/DO Analog</text>
+                      <text x="315" y="462" fill="#e2e8f0" font-size="9.5">• -K2.2..2.3: DI/DO Digital</text>
+                      <text x="315" y="479" fill="#e2e8f0" font-size="9.5">• -K2.1: Counter Tốc Độ</text>
                     </g>
 
                     <!-- SECTION 6.5: 3x LOCKING CYLINDERS (=bk / =bt COUPLING HOOKS) -->
                     <g class="component-node" onclick="showDetails('3x Xilanh Khóa Móc (=bk/=bt)', 'Cụm 3 xilanh khóa móc liên kết cơ khí - thủy lực (Locking Cylinders / Connecting Cylinders)', 'A53.6 (-K56 Lock) / A53.7 (-K57 Unlock)', 'Turck PicoNet -K2.3 (Port 4.4/4.2, DP-Adr. 25) | Giắc -X3.8 & -X11.3/-X11.8', 'Kéo gài chặt 3 đầu móc cơ khí ghép cứng Đầu cắt =bk với Xe kéo =bt khi thi công, hoặc rút chốt mở móc khi cần tách rời để bảo trì/thu hồi. Điều khiển qua nút -S2.23 (Item 26 Cabin) & phím VisAM Locking cyl.')">
-                        <!-- Interface Coupling Bulkhead Plate -X11.3/-X11.8 -->
-                        <rect x="740" y="140" width="10" height="320" rx="4" fill="#64748b" stroke="#cbd5e1" stroke-width="1.5"/>
-                        <text x="735" y="130" fill="#94a3b8" font-size="10" font-weight="bold" text-anchor="middle">VÁCH NỐI -X11</text>
+                      <!-- Interface Coupling Bulkhead Plate -X11.3/-X11.8 (Full height 420px) -->
+                      <rect x="702" y="90" width="8" height="420" rx="4" fill="#64748b" stroke="#cbd5e1" stroke-width="1.5"/>
+                      <text x="696" y="84" fill="#94a3b8" font-size="9" font-weight="bold" text-anchor="middle">VÁCH NỐI -X11</text>
 
-                        <!-- Top Locking Cylinder (Hook 1) -->
-                        <rect x="715" y="175" width="35" height="18" rx="3" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="1.5"/>
-                        <path d="M 750 178 L 780 178 L 786 186 L 780 192 L 750 192 Z" fill="#22c55e" stroke="#86efac" stroke-width="1.5"/>
-                        <circle cx="780" cy="185" r="4" fill="#facc15"/>
-                        <text x="690" y="170" fill="#f87171" font-size="9" font-weight="bold">Móc 1 (Lock 1)</text>
+                      <!-- Top Locking Cylinder & Claw Hook (Hook 1) -->
+                      <rect x="680" y="150" width="30" height="16" rx="3" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="1.5"/>
+                      <path d="M 710 153 L 742 153 L 748 161 L 742 166 L 710 166 Z" fill="#22c55e" stroke="#86efac" stroke-width="1.5"/>
+                      <circle cx="742" cy="159" r="3.5" fill="#facc15"/>
+                      <text x="655" y="145" fill="#f87171" font-size="8.5" font-weight="bold">Móc 1 (Lock 1)</text>
 
-                        <!-- Center Locking Cylinder (Hook 2 & Tow Bar) -->
-                        <rect x="715" y="292" width="35" height="18" rx="3" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="1.5"/>
-                        <path d="M 750 295 L 780 295 L 786 300 L 780 306 L 750 306 Z" fill="#22c55e" stroke="#86efac" stroke-width="1.5"/>
-                        <circle cx="780" cy="301" r="4" fill="#facc15"/>
-                        <text x="690" y="288" fill="#f87171" font-size="9" font-weight="bold">Móc 2 (Lock 2)</text>
+                      <!-- Center Locking Cylinder & Tow Bar (Hook 2 & Hitch) -->
+                      <rect x="680" y="292" width="30" height="16" rx="3" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="1.5"/>
+                      <path d="M 710 295 L 742 295 L 748 300 L 742 305 L 710 305 Z" fill="#22c55e" stroke="#86efac" stroke-width="1.5"/>
+                      <circle cx="742" cy="300" r="3.5" fill="#facc15"/>
+                      <text x="655" y="288" fill="#f87171" font-size="8.5" font-weight="bold">Móc 2 (Lock 2)</text>
 
-                        <!-- Bottom Locking Cylinder (Hook 3) -->
-                        <rect x="715" y="405" width="35" height="18" rx="3" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="1.5"/>
-                        <path d="M 750 408 L 780 408 L 786 416 L 780 422 L 750 422 Z" fill="#22c55e" stroke="#86efac" stroke-width="1.5"/>
-                        <circle cx="780" cy="415" r="4" fill="#facc15"/>
-                        <text x="690" y="402" fill="#f87171" font-size="9" font-weight="bold">Móc 3 (Lock 3)</text>
+                      <!-- Bottom Locking Cylinder & Claw Hook (Hook 3) -->
+                      <rect x="680" y="440" width="30" height="16" rx="3" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="1.5"/>
+                      <path d="M 710 443 L 742 443 L 748 451 L 742 456 L 710 456 Z" fill="#22c55e" stroke="#86efac" stroke-width="1.5"/>
+                      <circle cx="742" cy="449" r="3.5" fill="#facc15"/>
+                      <text x="655" y="435" fill="#f87171" font-size="8.5" font-weight="bold">Móc 3 (Lock 3)</text>
 
-                        <!-- Solenoid Valve Control Block -K56 / -K57 -->
-                        <rect x="655" y="225" width="75" height="38" rx="4" fill="#0f172a" stroke="#d97706" stroke-width="1.5"/>
-                        <text x="662" y="240" fill="#f59e0b" font-size="9" font-weight="bold">-K56 Lock (A53.6)</text>
-                        <text x="662" y="255" fill="#38bdf8" font-size="9" font-weight="bold">-K57 Unlock (A53.7)</text>
+                      <!-- Solenoid Valve Control Block -K56 / -K57 -->
+                      <rect x="625" y="225" width="70" height="34" rx="4" fill="#0f172a" stroke="#d97706" stroke-width="1.5"/>
+                      <text x="630" y="238" fill="#f59e0b" font-size="8" font-weight="bold">-K56 Lock (A53.6)</text>
+                      <text x="630" y="252" fill="#38bdf8" font-size="8" font-weight="bold">-K57 Unlock (A53.7)</text>
+
+                      <!-- Connector Lines to Turck -K2.3 Port 4 -->
+                      <path d="M 460 465 L 625 242" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,3"/>
                     </g>
 
-                    <!-- Inter-connection Cable Lines (Profibus / Power) -->
-                    <path d="M 480 455 L 720 455" stroke="#a855f7" stroke-width="3" stroke-dasharray="6,4"/>
-                    <text x="530" y="445" fill="#c084fc" font-size="11" font-weight="bold">Cáp Tím Profibus-DP về Cabin</text>
+                    <!-- SECTION 7: BACKUP TRAILER (=ppm) - KÍCH THƯỚC BẰNG THÂN ĐẦU KHIÊN (y=75, h=450, BỎ BÁNH XE) -->
+                    <g class="component-node" onclick="showDetails('Backup Trailer (=ppm)', 'Khung Giàn Phụ Trợ Trailer Kéo Sau Khiên', 'Khớp kéo mềm, Máng cáp 900V, Cụm van thủy lực phụ trợ', 'Bơm bùn nạp/xả DN100/DN150, Biến áp Spartrafo 300kVA', 'Đồng kích thước thân khiên đào, dẫn hướng trực tiếp trong lòng cống bê tông DN2100')">
+                      <!-- Articulation hitch connecting to rear shield -->
+                      <line x1="710" y1="300" x2="750" y2="300" stroke="#facc15" stroke-width="6"/>
+                      <circle cx="730" cy="300" r="7" fill="#eab308"/>
 
-                </svg>
+                      <!-- Trailer Carriage Hull (Kích thước y=75, height=450 bằng thân đầu khiên) -->
+                      <rect x="750" y="75" width="240" height="450" rx="16" fill="#0f172a" fill-opacity="0.95" stroke="#334155" stroke-width="3"/>
+                      <text x="765" y="105" fill="#64748b" font-size="13" font-weight="bold">GIÀN PHỤ TRỢ TRAILER (=ppm)</text>
+
+                      <!-- 900V Power & Trafo Box -->
+                      <rect x="770" y="125" width="95" height="75" rx="6" fill="#0f172a" stroke="#a855f7" stroke-width="1.5"/>
+                      <text x="780" y="155" fill="#c084fc" font-size="10.5" font-weight="bold">TRAFO 900V</text>
+                      <text x="780" y="175" fill="#94a3b8" font-size="9">-T15.2 (300kVA)</text>
+
+                      <!-- Slurry Manifold & Booster Valve -->
+                      <rect x="880" y="125" width="95" height="75" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+                      <text x="890" y="155" fill="#38bdf8" font-size="10.5" font-weight="bold">BƠM BÙN</text>
+                      <text x="890" y="175" fill="#94a3b8" font-size="9">DN100 / DN150</text>
+
+                      <!-- Cable Tray / Máng cáp -->
+                      <rect x="770" y="215" width="205" height="38" rx="4" fill="#0b0f19" stroke="#eab308" stroke-dasharray="4"/>
+                      <text x="780" y="238" fill="#facc15" font-size="10">Máng Cáp Động Lực &amp; Ống Thủy Lực</text>
+
+                      <!-- Camera & Lamp inside Trailer Deck (ĐẶT VỊ TRÍ TRONG TRAILER THEO YÊU CẦU) -->
+                      <g class="component-node" onclick="showDetails('Camera & Lamp (-P10.1 / -E9.1)', 'Camera IP68 & Đèn LED Chiếu Sáng Trên Sàn Trailer', 'Camera -P10.1 (mts-No. 85077) / Lamp -E9.1', 'Nguồn 24VDC, Bộ truyền Video BNC -B10.1 (mts-No. 30949)', 'Giám sát trực tiếp không gian sàn máy Trailer, tuyến cáp 900V và hoạt động cụm bơm bùn')">
+                        <rect x="770" y="268" width="205" height="42" rx="6" fill="#eab308" fill-opacity="0.2" stroke="#eab308" stroke-width="1.5"/>
+                        <rect x="780" y="276" width="34" height="24" rx="4" fill="#eab308" stroke="#facc15" stroke-width="1.5"/>
+                        <circle cx="797" cy="288" r="5" fill="#000000"/>
+                        <text x="824" y="286" fill="#facc15" font-size="10.5" font-weight="bold">CAM / LAMP (-P10.1 / -E9.1)</text>
+                        <text x="824" y="301" fill="#94a3b8" font-size="9">Camera IP68 &amp; Đèn Chiếu Sáng Trailer</text>
+                      </g>
+
+                      <!-- Slurry Pipes Extension (BIỂU THỊ TO VÀ RÕ HƠN THEO YÊU CẦU) -->
+                      <!-- Ống Bùn Cấp DN100 (Feed) - To hơn (height=24) -->
+                      <rect x="680" y="330" width="300" height="24" rx="6" fill="#1d4ed8" stroke="#60a5fa" stroke-width="2"/>
+                      <line x1="680" y1="342" x2="980" y2="342" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="6,4"/>
+                      <text x="830" y="346" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">ỐNG BÙN CẤP DN100 (FEED)</text>
+
+                      <!-- Ống Xả Bùn Thải DN150 (Discharge) - To vượt trội (height=32) -->
+                      <rect x="680" y="375" width="300" height="32" rx="7" fill="#c2410c" stroke="#fb923c" stroke-width="2.5"/>
+                      <line x1="680" y1="391" x2="980" y2="391" stroke="#fed7aa" stroke-width="2" stroke-dasharray="8,5"/>
+                      <text x="830" y="395" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">ỐNG XẢ BÙN THẢI DN150 (DISCHARGE)</text>
+                    </g>
+
+                    <!-- Purple Profibus Cable Line -->
+                    <path d="M 460 452 L 750 452" stroke="#a855f7" stroke-width="3" stroke-dasharray="6,4"/>
+                    <text x="500" y="442" fill="#c084fc" font-size="11" font-weight="bold">Cáp Tím Profibus-DP về Cabin</text>
+                  </svg>
             </div>
 
             <!-- Legend Grid -->
