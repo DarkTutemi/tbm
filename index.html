@@ -212,18 +212,164 @@
 
     /* Machine Graphic Stage */
     .tbm-stage-container {
-      height: 380px;
+      height: 420px;
       background: #080c14;
       border-radius: 10px;
       border: 1px solid #1a2542;
       position: relative;
       overflow: hidden;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
     }
 
     canvas#tbmCanvas {
       width: 100%;
       height: 100%;
       display: block;
+    }
+
+    /* Stage View Mode Toggle Buttons */
+    .stage-view-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .stage-view-btn:hover {
+      background: rgba(0, 210, 255, 0.1);
+      color: var(--accent-blue);
+      border-color: var(--accent-blue);
+    }
+    .stage-view-btn.active {
+      background: linear-gradient(135deg, rgba(0, 210, 255, 0.2), rgba(0, 242, 254, 0.08));
+      color: var(--accent-blue);
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
+    }
+
+    /* Bohrkopf (=bk) & Trailer Cutaway Styles (from cutter.html) */
+    .bk-cutaway-container {
+      background: #080c14;
+      border-radius: 10px;
+      border: 1px solid #1a2542;
+      padding: 16px;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+    .bk-main-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 16px;
+    }
+    @media (max-width: 1024px) {
+      .bk-main-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .bk-svg-box {
+      background: #020617;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #1e293b;
+      position: relative;
+    }
+    .bk-svg-box svg .component-node {
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .bk-svg-box svg .component-node:hover {
+      filter: drop-shadow(0 0 8px #38bdf8);
+      opacity: 0.92;
+    }
+    .bk-info-panel {
+      background: #111827;
+      border-radius: 8px;
+      border: 1px solid #1f2937;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .bk-panel-header {
+      font-size: 15px;
+      font-weight: 700;
+      color: #38bdf8;
+      border-bottom: 1px solid #374151;
+      padding-bottom: 6px;
+    }
+    .bk-detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      background: #0b0f19;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border-left: 3px solid #38bdf8;
+    }
+    .bk-detail-item .label {
+      font-size: 11px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .bk-detail-item .value {
+      font-size: 13px;
+      font-weight: 600;
+      color: #f3f4f6;
+    }
+    .bk-legend-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .bk-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      background: #0b0f19;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #1f2937;
+    }
+    .bk-color-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .bk-table-section {
+      margin-top: 16px;
+      background: #0b0f19;
+      border-radius: 8px;
+      border: 1px solid #1f2937;
+      padding: 14px;
+      overflow-x: auto;
+    }
+    .bk-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .bk-table th, .bk-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #1f2937;
+      text-align: left;
+    }
+    .bk-table th {
+      background: #020617;
+      color: #38bdf8;
+      font-weight: 700;
+    }
+    .bk-table tr:hover {
+      background: rgba(56, 189, 248, 0.05);
     }
 
     /* Metrics Grid */
@@ -3728,13 +3874,243 @@
     <div class="dashboard-container">
       <div style="display: flex; flex-direction: column; gap: 20px;">
         <div class="card">
-          <div class="card-title">
-            <span>HOẠT ĐỘNG KHIÊN ĐÀO & TUYẾN KÍCH ĐẨY (FC35 / FC20 / FC25 / FC40)</span>
-            <span class="tag">REAL-TIME SIMULATION</span>
+          <div class="card-title" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span>HOẠT ĐỘNG KHIÊN ĐÀO & TUYẾN KÍCH ĐẨY (FC35 / FC20 / FC25 / FC40)</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button class="stage-view-btn active" id="btnViewSim" onclick="switchStageView('sim')">🎥 Tuyến Đào & Trailer (Real-Time)</button>
+              <button class="stage-view-btn" id="btnViewBkCutaway" onclick="switchStageView('cutaway')">📐 Cấu Tạo Đầu Cắt (=bk) & Trailer</button>
+              <span class="tag">REAL-TIME SIMULATION</span>
+            </div>
           </div>
 
-          <div class="tbm-stage-container">
-            <canvas id="tbmCanvas"></canvas>
+          <!-- VIEW 1: DYNAMIC REAL-TIME SIMULATION STAGE (CANVAS) -->
+          <div id="simStageWrap">
+            <div class="tbm-stage-container">
+              <canvas id="tbmCanvas"></canvas>
+            </div>
+          </div>
+
+          <!-- VIEW 2: INTERACTIVE BOHRKOPF (=bk) & TRAILER ENGINEERING BLUEPRINT (FROM cutter.html) -->
+          <div id="bkCutawayWrap" style="display: none;">
+            <div class="bk-cutaway-container">
+              <div class="bk-main-layout">
+                <!-- SVG Canvas Box -->
+                <div class="bk-svg-box">
+                  <svg viewBox="0 0 1020 620" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background Grid -->
+                    <defs>
+                      <pattern id="gridBk" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+                      </pattern>
+                    </defs>
+                    <rect width="1020" height="620" fill="url(#gridBk)" />
+
+                    <!-- Main Outer Housing Shell (=bk) -->
+                    <rect x="110" y="75" width="600" height="450" rx="16" fill="#0f172a" stroke="#334155" stroke-width="3" />
+                    <text x="130" y="105" fill="#64748b" font-size="13" font-weight="bold">THÂN ĐẦU KHIÊN (DRILLING HEAD SHELL =bk)</text>
+
+                    <!-- SECTION 1: CUTTER DISC (Front) -->
+                    <g class="component-node" onclick="showBkDetails('Cutter Disc (-M15.1)', 'Mâm Cắt Gọt Đất Đá Schürfrad', '-M15.1 (132kW Motor) | 900V AC', 'Cảm biến đếm xung RPM -B1 (EW478/EW483) đấu về Turck -K2.1', 'Cấu tạo từ thép chịu lực gắn các răng gọt hợp kim màu vàng và đĩa cắt con lăn phá đá')">
+                      <path d="M 110 115 L 160 115 L 160 485 L 110 485 Z" fill="#38bdf8" fill-opacity="0.2" stroke="#38bdf8" stroke-width="2"/>
+                      <!-- Cutter Teeth (Răng gọt hợp kim màu vàng) -->
+                      <polygon points="95,145 110,135 110,155" fill="#eab308"/>
+                      <polygon points="95,230 110,220 110,240" fill="#eab308"/>
+                      <polygon points="95,315 110,305 110,325" fill="#eab308"/>
+                      <polygon points="95,400 110,390 110,410" fill="#eab308"/>
+                      <polygon points="95,465 110,455 110,475" fill="#eab308"/>
+                      <text x="120" y="300" fill="#38bdf8" font-size="11" font-weight="bold" transform="rotate(-90 125 300)">ĐĨA CẮT (CUTTING DISC)</text>
+                    </g>
+
+                    <!-- RPM Sensor -B1 -->
+                    <g class="component-node" onclick="showBkDetails('RPM Sensor (-B1)', 'Cảm Biến Đếm Tốc Độ Vòng Quay Đĩa Cắt', 'Tín hiệu: EW478 / EW483 (High Speed Counter)', 'Module: Turck PicoNet -K2.1 (Port 1 / DP-Adr. 30)', 'Mã mts-No.: 85086 | Đo xung điện cảm ứng từ đĩa răng trục chính')">
+                      <circle cx="160" cy="175" r="10" fill="#a855f7"/>
+                      <text x="175" y="179" fill="#a855f7" font-size="11" font-weight="bold">RPM Sensor -B1</text>
+                    </g>
+
+                    <!-- SECTION 2: CRUSHER CONE & SLURRY CHAMBER -->
+                    <g class="component-node" onclick="showBkDetails('Slurry Chamber & Crusher', 'Khoang Bùn & Nón Nghiền Đá', 'Áp suất: -B242 (EW374 / 0-10 bar)', 'Dung dịch bùn Bentonite giữ ổn định mặt gương đào hầm', 'Nón nghiền đá tảng trước khi hút qua đường xả bùn')">
+                      <path d="M 160 135 L 280 165 L 280 435 L 160 465 Z" fill="#0284c7" fill-opacity="0.18" stroke="#0284c7" stroke-width="2" stroke-dasharray="4"/>
+                      <text x="178" y="300" fill="#38bdf8" font-size="11" font-weight="bold">NÓN NGHIỀN &amp; KHOANG BÙN</text>
+                    </g>
+
+                    <!-- Camera & Lamp -->
+                    <g class="component-node" onclick="showBkDetails('Camera & Lamp (-P10.1 / -E9.1)', 'Camera IP68 & Đèn LED Chiếu Sáng Buồng Đào', 'Camera -P10.1 (mts-No. 85077) / Lamp -E9.1', 'Nguồn 24VDC, Bộ truyền Video BNC -B10.1 (mts-No. 30949)', 'Giám sát trực tiếp hình ảnh gương đào hầm truyền về màn hình phụ Zusatzmonitor')">
+                      <rect x="190" y="150" width="55" height="25" rx="4" fill="#eab308" fill-opacity="0.3" stroke="#eab308"/>
+                      <text x="195" y="167" fill="#eab308" font-size="9.5" font-weight="bold">CAM / LAMP</text>
+                    </g>
+
+                    <!-- Slurry Pressure Sensor -B242 -->
+                    <g class="component-node" onclick="showBkDetails('Slurry Pressure (-B242)', 'Cảm Biến Áp Lực Buồng Đào Bùn', 'EW374 / PIW374 (0-10 bar analog 4-20mA)', 'Module: Turck PicoNet -K1.1 (Port 2 / DP-Adr. 23)', 'Duy trì cân bằng áp lực đất EPB chống sạt lở hoặc trồi lún mặt đường')">
+                      <circle cx="240" cy="415" r="10" fill="#0284c7"/>
+                      <text x="190" y="445" fill="#38bdf8" font-size="11" font-weight="bold">P Slurry -B242</text>
+                    </g>
+
+                    <!-- SECTION 3: BYPASS & JET VALVE ASSEMBLY -->
+                    <g class="component-node" onclick="showBkDetails('Bypass & Jet Valves (-K58..61)', 'Cụm Van Bùn Bypass & Jet', 'Coil: -K58/59 (Bypass A52.0/1), -K60/61 (Jet A52.2/3)', 'LS: -B62 (E52.0/1), -B64 (E52.2/3)', 'Chuyển đổi linh hoạt giữa chế độ tuần hoàn ngắn mạch và xối rửa tia nước cao áp')">
+                      <rect x="305" y="135" width="155" height="150" rx="8" fill="#d97706" fill-opacity="0.15" stroke="#d97706" stroke-width="2"/>
+                      <text x="318" y="160" fill="#f59e0b" font-size="11" font-weight="bold">CỤM VAN BYPASS &amp; JET</text>
+                      <rect x="320" y="175" width="125" height="32" rx="4" fill="#d97706" fill-opacity="0.4"/>
+                      <text x="328" y="196" fill="#fff" font-size="10.5">Van Bypass (-K58/59)</text>
+                      <rect x="320" y="225" width="125" height="32" rx="4" fill="#d97706" fill-opacity="0.4"/>
+                      <text x="338" y="246" fill="#fff" font-size="10.5">Van Jet (-K60/61)</text>
+                    </g>
+
+                    <!-- SECTION 4: 3D STEERING CYLINDERS (120 deg apart) -->
+                    <g class="component-node" onclick="showBkDetails('Steering Rams (1,2,3)', 'Hệ Thống 3 Xilanh Bẻ Khớp Lái 3D 120°', 'Solenoid: -K50 đến -K55 | Áp suất: -B54, -B55, -B56 (EW364, 366, 368)', 'Module: Turck PicoNet -K1.2 (DP-Adr. 22)', 'Bẻ hướng đầu khiên chính xác theo vệt tia Laser định vị TACS')">
+                      <!-- Cyl 1 (Top 0°) -->
+                      <rect x="490" y="105" width="135" height="28" rx="4" fill="#ef4444" fill-opacity="0.25" stroke="#ef4444" stroke-width="2"/>
+                      <text x="498" y="124" fill="#ef4444" font-size="10.5" font-weight="bold">Xilanh Lái 1 (0° Top)</text>
+                      <!-- Cyl 2 (Right 120°) -->
+                      <rect x="490" y="320" width="135" height="28" rx="4" fill="#ef4444" fill-opacity="0.25" stroke="#ef4444" stroke-width="2"/>
+                      <text x="495" y="339" fill="#ef4444" font-size="10.5" font-weight="bold">Xilanh Lái 2 (120° Phải)</text>
+                      <!-- Cyl 3 (Left 240°) -->
+                      <rect x="490" y="460" width="135" height="28" rx="4" fill="#ef4444" fill-opacity="0.25" stroke="#ef4444" stroke-width="2"/>
+                      <text x="495" y="479" fill="#ef4444" font-size="10.5" font-weight="bold">Xilanh Lái 3 (240° Trái)</text>
+                    </g>
+
+                    <!-- SECTION 5: INCLINOMETER (-B57 Pitch & Roll) -->
+                    <g class="component-node" onclick="showBkDetails('Inclinometer (-B57)', 'Cảm Biến Độ Nghiêng 2 Trục (Pitch & Roll)', 'EW370 / PIW370 (+/- 60° Novotechnik/Seika)', 'Module: Turck PicoNet -K1.2 (DP-Adr. 22)', 'Đo độ dốc trục dọc (Pitch) và góc xoay lật (Roll) của thân khiên')">
+                      <rect x="305" y="315" width="155" height="60" rx="8" fill="#16a34a" fill-opacity="0.2" stroke="#16a34a" stroke-width="2"/>
+                      <circle cx="330" cy="345" r="14" fill="#16a34a"/>
+                      <text x="352" y="342" fill="#4ade80" font-size="11" font-weight="bold">INCLINOMETER</text>
+                      <text x="352" y="358" fill="#94a3b8" font-size="9.5">-B57 (Pitch &amp; Roll)</text>
+                    </g>
+
+                    <!-- SECTION 6: TURCK PICONET PROFIBUS IO MODULES -->
+                    <g class="component-node" onclick="showBkDetails('Turck PicoNet Modules', 'Trạm I/O Phân Tán Turck PicoNet IP67', 'Module -K1.1..1.4, -K2.1, -K2.2, -K2.3', 'Mạng Profibus-DP (12Mbps) truyền về PLC S7-300 Cabin', 'Thu thập cảm biến và xuất lệnh điều khiển van điện từ trên đầu khiên')">
+                      <rect x="305" y="405" width="155" height="95" rx="8" fill="#a855f7" fill-opacity="0.18" stroke="#a855f7" stroke-width="2"/>
+                      <text x="315" y="426" fill="#c084fc" font-size="11" font-weight="bold">CỤM PICONET I/O</text>
+                      <text x="315" y="445" fill="#e2e8f0" font-size="9.5">• -K1.1..1.3: 4AI Analog</text>
+                      <text x="315" y="462" fill="#e2e8f0" font-size="9.5">• -K2.2..2.3: Digital I/O</text>
+                      <text x="315" y="479" fill="#e2e8f0" font-size="9.5">• -K2.1: Counter 2-Chan</text>
+                    </g>
+
+                    <!-- SECTION 7: BACKUP TRAILER & ARTICULATION HITCH -->
+                    <g class="component-node" onclick="showBkDetails('Backup Trailer (=ppm)', 'Khung Giàn Phụ Trợ Trailer Kéo Sau Khiên', 'Khớp kéo mềm, Máng cáp 900V, Cụm van thủy lực phụ trợ', 'Bơm bùn nạp/xả DN100/DN150, Biến áp Spartrafo 300kVA', 'Chạy trên bánh lăn dẫn hướng trong lòng cống bê tông DN2100')">
+                      <!-- Articulation hitch connecting to rear shield -->
+                      <line x1="710" y1="300" x2="750" y2="300" stroke="#facc15" stroke-width="6"/>
+                      <circle cx="730" cy="300" r="7" fill="#eab308"/>
+                      <!-- Trailer Carriage Hull -->
+                      <rect x="750" y="115" width="240" height="370" rx="12" fill="#1e293b" fill-opacity="0.9" stroke="#64748b" stroke-width="2"/>
+                      <text x="765" y="145" fill="#facc15" font-size="12" font-weight="bold">GIÀN PHỤ TRỢ TRAILER (=ppm)</text>
+                      <!-- Trailer Wheels / Rollers -->
+                      <circle cx="780" cy="495" r="10" fill="#475569" stroke="#94a3b8" stroke-width="2"/>
+                      <circle cx="940" cy="495" r="10" fill="#475569" stroke="#94a3b8" stroke-width="2"/>
+                      <!-- 900V Power & Trafo Box -->
+                      <rect x="770" y="165" width="95" height="75" rx="6" fill="#0f172a" stroke="#a855f7" stroke-width="1.5"/>
+                      <text x="780" y="195" fill="#c084fc" font-size="10" font-weight="bold">TRAFO 900V</text>
+                      <text x="780" y="215" fill="#94a3b8" font-size="9">-T15.2 (300kVA)</text>
+                      <!-- Slurry Manifold & Booster Valve -->
+                      <rect x="880" y="165" width="95" height="75" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+                      <text x="890" y="195" fill="#38bdf8" font-size="10" font-weight="bold">BƠM BÙN</text>
+                      <text x="890" y="215" fill="#94a3b8" font-size="9">DN100 / DN150</text>
+                      <!-- Cable Tray / Máng cáp -->
+                      <rect x="770" y="260" width="205" height="40" rx="4" fill="#0b0f19" stroke="#eab308" stroke-dasharray="4"/>
+                      <text x="780" y="284" fill="#facc15" font-size="10">Máng Cáp Động Lực &amp; Ống Thủy Lực</text>
+                      <!-- Slurry Pipes Extension -->
+                      <line x1="680" y1="360" x2="980" y2="360" stroke="#2563eb" stroke-width="5"/>
+                      <text x="780" y="352" fill="#60a5fa" font-size="9">Ống Bùn Cấp DN100 (Feed)</text>
+                      <line x1="680" y1="410" x2="980" y2="410" stroke="#ea580c" stroke-width="7"/>
+                      <text x="780" y="402" fill="#fb923c" font-size="9">Ống Xả Bùn Thải DN150 (Discharge)</text>
+                    </g>
+
+                    <!-- Purple Profibus Cable Line -->
+                    <path d="M 460 452 L 750 452" stroke="#a855f7" stroke-width="3" stroke-dasharray="6,4"/>
+                    <text x="500" y="442" fill="#c084fc" font-size="11" font-weight="bold">Cáp Tím Profibus-DP về Cabin</text>
+                  </svg>
+                </div>
+
+                <!-- Right Side Detail Info Panel -->
+                <div class="bk-info-panel">
+                  <div class="bk-panel-header" id="bk-panel-title">THÔNG TIN CHI TIẾT THIẾT BỊ</div>
+                  <div class="bk-detail-item">
+                    <span class="label">Tên Thành Phần / Ký Hiệu</span>
+                    <span class="value" id="bk-comp-name">Chọn một phần tử trên sơ đồ</span>
+                  </div>
+                  <div class="bk-detail-item">
+                    <span class="label">Mô Tả Kỹ Thuật</span>
+                    <span class="value" id="bk-comp-func">Nhấp vào bất kỳ khối nào trên bản vẽ để xem thông số chi tiết</span>
+                  </div>
+                  <div class="bk-detail-item">
+                    <span class="label">Tín Hiệu / Địa Chỉ PLC</span>
+                    <span class="value" id="bk-comp-signal">-</span>
+                  </div>
+                  <div class="bk-detail-item">
+                    <span class="label">Module Đấu Nối</span>
+                    <span class="value" id="bk-comp-module">-</span>
+                  </div>
+                  <div class="bk-detail-item">
+                    <span class="label">Ghi Chú Vận Hành</span>
+                    <span class="value" id="bk-comp-note">-</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Legend Grid -->
+              <div class="bk-legend-grid">
+                <div class="bk-legend-item">
+                  <div class="bk-color-dot" style="background: #38bdf8;"></div>
+                  <span>Mâm cắt & Đĩa gọt hợp kim</span>
+                </div>
+                <div class="bk-legend-item">
+                  <div class="bk-color-dot" style="background: #0284c7;"></div>
+                  <span>Cảm biến tương tự (4-20mA)</span>
+                </div>
+                <div class="bk-legend-item">
+                  <div class="bk-color-dot" style="background: #d97706;"></div>
+                  <span>Van Bypass & Béc phun Jet</span>
+                </div>
+                <div class="bk-legend-item">
+                  <div class="bk-color-dot" style="background: #ef4444;"></div>
+                  <span>3 Xilanh lái 3D (0°, 120°, 240°)</span>
+                </div>
+                <div class="bk-legend-item">
+                  <div class="bk-color-dot" style="background: #16a34a;"></div>
+                  <span>Inclinometer Pitch & Roll</span>
+                </div>
+                <div class="bk-legend-item">
+                  <div class="bk-color-dot" style="background: #a855f7;"></div>
+                  <span>Turck PicoNet Profibus I/O</span>
+                </div>
+                <div class="bk-legend-item">
+                  <div class="bk-color-dot" style="background: #facc15;"></div>
+                  <span>Giàn phụ trợ Trailer (=ppm)</span>
+                </div>
+              </div>
+
+              <!-- Summary Table from cutter.html -->
+              <div class="bk-table-section">
+                <div class="bk-panel-header" style="margin-bottom: 10px;">DANH MỤC THIẾT BỊ ĐIỆN & CẢM BIẾN TẠI ĐẦU KHIÊN (=bk) VÀ TRAILER (=ppm)</div>
+                <table class="bk-table">
+                  <thead>
+                    <tr>
+                      <th>Ký Hiệu</th>
+                      <th>Tên Thiết Bị / Cảm Biến</th>
+                      <th>Loại Tín Hiệu</th>
+                      <th>Địa Chỉ PLC / Tín Hiệu</th>
+                      <th>Module Đấu Nối</th>
+                      <th>Mã Đặt Hàng (mts-No.)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><strong>-M15.1</strong></td><td>Động cơ truyền động mâm cắt (132kW/900V)</td><td><span class="tag tag-valve">900V AC Drive</span></td><td>PQW268 (Tốc độ tỷ lệ)</td><td>Khởi động mềm Sirius -T15.1</td><td>176449</td></tr>
+                    <tr><td><strong>-B1</strong></td><td>Cảm biến đếm tốc độ đĩa cắt (RPM)</td><td><span class="tag tag-counter">Counter</span></td><td>EW478 / EW483</td><td>-K2.1 (DP-Adr. 30)</td><td>85086</td></tr>
+                    <tr><td><strong>-B242</strong></td><td>Cảm biến áp lực buồng đào bùn</td><td><span class="tag tag-analog">Analog 4-20mA</span></td><td>EW374 / PIW374 (0-10 bar)</td><td>-K1.1 (DP-Adr. 23)</td><td>85125</td></tr>
+                    <tr><td><strong>-B57</strong></td><td>Cảm biến độ nghiêng 2 trục (Inclinometer)</td><td><span class="tag tag-analog">Analog 4-20mA</span></td><td>EW370 / PIW370 (+/- 60°)</td><td>-K1.2 (DP-Adr. 22)</td><td>115223</td></tr>
+                    <tr><td><strong>-B54..56</strong></td><td>Cảm biến áp suất xilanh lái 1, 2, 3</td><td><span class="tag tag-analog">Analog 4-20mA</span></td><td>EW364, EW366, EW368</td><td>-K1.2 (DP-Adr. 22)</td><td>85125</td></tr>
+                    <tr><td><strong>-B62</strong></td><td>Công tắc hành trình van Bypass (Open/Close)</td><td><span class="tag tag-digital">Digital Input</span></td><td>E52.0 / E52.1</td><td>-K2.2 (DP-Adr. 24)</td><td>85070</td></tr>
+                    <tr><td><strong>-B64</strong></td><td>Công tắc hành trình van Jet (Open/Close)</td><td><span class="tag tag-digital">Digital Input</span></td><td>E52.2 / E52.3</td><td>-K2.2 (DP-Adr. 24)</td><td>85070</td></tr>
+                    <tr><td><strong>-K58..59</strong></td><td>Cuộn coil van điện từ Bypass</td><td><span class="tag tag-valve">Digital Output</span></td><td>A52.0 / A52.1 (24VDC)</td><td>-K2.2 (DP-Adr. 24)</td><td>85070</td></tr>
+                    <tr><td><strong>-K60..61</strong></td><td>Cuộn coil van điện từ Jet</td><td><span class="tag tag-valve">Digital Output</span></td><td>A52.2 / A52.3 (24VDC)</td><td>-K2.2 (DP-Adr. 24)</td><td>85070</td></tr>
+                    <tr><td><strong>-P10.1</strong></td><td>Camera giám sát gương hầm IP68</td><td><span class="tag tag-analog">Video Signal</span></td><td>Nguồn 24VDC / Transmitter -B10.1</td><td>Bộ truyền BNC -B10.1</td><td>85077</td></tr>
+                    <tr><td><strong>-T15.2</strong></td><td>Biến áp tăng áp 900V trên Trailer</td><td><span class="tag tag-analog">400V/900V 300kVA</span></td><td>Nguồn động lực đĩa cắt</td><td>Trailer Deck (=ppm)</td><td>403157</td></tr>
+                    <tr><td><strong>-W3.3</strong></td><td>Cáp truyền thông mạng cáp dẹt SmartWire & DP</td><td><span class="tag tag-counter">Profibus 12Mbps</span></td><td>Truyền tín hiệu bàn điều khiển =cc</td><td>Gateway EU5C-SWD-DP</td><td>401822</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
 
           <div class="metrics-grid">
@@ -9465,6 +9841,18 @@
     let rollAngle = 0.8;
     let laserOffsetX = 4;
     let laserOffsetY = -8;
+    let eStopTripped = false;
+    let bypassOpen = false;
+    let jetOpen = true;
+    let mainEngineRunning = true;
+    let chargePumpRunning = true;
+    let feedPumpRunning = true;
+    let boosterPumpRunning = false;
+    let cuttingDiscState = 'CW'; // 'LEFT', 'STOP', 'CW' (RIGHT)
+    let jackingState = 'ADV'; // 'RET', 'STOP', 'ADV'
+    let steerCylStates = { 10: 'mid', 11: 'mid', 12: 'mid', 13: 'down', 24: 'down', 25: 'up', 26: 'up' };
+    let flushModeIdx = 2; // 0: SETUP, 1: MANUAL, 2: AUTOMATIC
+    const flushModes = ['SETUP', 'MANUAL', 'AUTOMATIC'];
 
     const canvas = document.getElementById('tbmCanvas');
     const ctx = canvas ? canvas.getContext('2d') : null;
@@ -9534,6 +9922,54 @@
       }
     }
 
+    // Global particles for slurry and rock cutting
+    const rockParticles = [];
+    for (let i = 0; i < 25; i++) {
+      rockParticles.push({
+        x: Math.random(),
+        y: Math.random(),
+        vx: 0.5 + Math.random() * 1.5,
+        vy: (Math.random() - 0.5) * 1.2,
+        size: 2 + Math.random() * 3,
+        color: Math.random() > 0.5 ? '#f59e0b' : '#94a3b8'
+      });
+    }
+
+    function switchStageView(mode) {
+      const simWrap = document.getElementById('simStageWrap');
+      const cutawayWrap = document.getElementById('bkCutawayWrap');
+      const btnSim = document.getElementById('btnViewSim');
+      const btnCutaway = document.getElementById('btnViewBkCutaway');
+      
+      if (mode === 'sim') {
+        if (simWrap) simWrap.style.display = 'block';
+        if (cutawayWrap) cutawayWrap.style.display = 'none';
+        if (btnSim) btnSim.classList.add('active');
+        if (btnCutaway) btnCutaway.classList.remove('active');
+        setTimeout(resizeCanvas, 60);
+      } else {
+        if (simWrap) simWrap.style.display = 'none';
+        if (cutawayWrap) cutawayWrap.style.display = 'block';
+        if (btnSim) btnSim.classList.remove('active');
+        if (btnCutaway) btnCutaway.classList.add('active');
+      }
+    }
+
+    function showBkDetails(title, func, signal, module, note) {
+      const pTitle = document.getElementById('bk-panel-title');
+      const cName = document.getElementById('bk-comp-name');
+      const cFunc = document.getElementById('bk-comp-func');
+      const cSignal = document.getElementById('bk-comp-signal');
+      const cModule = document.getElementById('bk-comp-module');
+      const cNote = document.getElementById('bk-comp-note');
+      if (pTitle) pTitle.innerText = title;
+      if (cName) cName.innerText = title;
+      if (cFunc) cFunc.innerText = func;
+      if (cSignal) cSignal.innerText = signal;
+      if (cModule) cModule.innerText = module;
+      if (cNote) cNote.innerText = note;
+    }
+
     function animate() {
       if (!canvas || !ctx) return;
       const w = canvas.width;
@@ -9541,12 +9977,20 @@
 
       ctx.clearRect(0, 0, w, h);
 
-      if (!isEStop) {
+      // Physics and kinematics updates
+      const isRunning = (!isEStop && !eStopTripped);
+      if (isRunning) {
         const speedMmSec = (jackSpeedPct / 100) * 0.8;
         distanceMm += speedMmSec;
 
+        let effectiveDir = cutterDir;
+        if (typeof cuttingDiscState !== 'undefined') {
+          if (cuttingDiscState === 'LEFT') effectiveDir = -1;
+          else if (cuttingDiscState === 'CW') effectiveDir = 1;
+          else if (cuttingDiscState === 'STOP') effectiveDir = 0;
+        }
         const rpm = (cutterSpeedPct / 100) * 6.0;
-        cutterAngle += (rpm * 360 / 60) * 0.016 * cutterDir;
+        cutterAngle += (rpm * 360 / 60) * 0.016 * effectiveDir;
 
         strokeJack = (strokeJack + (speedMmSec * 0.05)) % 100;
 
@@ -9554,126 +9998,703 @@
         laserOffsetY = -8 + Math.cos(Date.now() * 0.0015) * 3 + (steeringAngle * 0.5);
       }
 
-      ctx.fillStyle = '#111726';
+      // Background Tunnel Environment & Geology
+      ctx.fillStyle = '#080c16';
       ctx.fillRect(0, 0, w, h);
 
-      const tunnelTop = h * 0.2;
-      const tunnelBottom = h * 0.8;
+      const tunnelTop = Math.round(h * 0.16);
+      const tunnelBottom = Math.round(h * 0.84);
       const tunnelHeight = tunnelBottom - tunnelTop;
+      const tunnelMidY = tunnelTop + tunnelHeight * 0.5;
 
-      ctx.strokeStyle = '#1e2942';
+      // Geological strata (Upper and lower rock/soil layers)
+      const strataGradTop = ctx.createLinearGradient(0, 0, 0, tunnelTop);
+      strataGradTop.addColorStop(0, '#101626');
+      strataGradTop.addColorStop(0.6, '#182033');
+      strataGradTop.addColorStop(1, '#0e1422');
+      ctx.fillStyle = strataGradTop;
+      ctx.fillRect(0, 0, w, tunnelTop);
+
+      const strataGradBottom = ctx.createLinearGradient(0, tunnelBottom, 0, h);
+      strataGradBottom.addColorStop(0, '#0e1422');
+      strataGradBottom.addColorStop(0.4, '#182033');
+      strataGradBottom.addColorStop(1, '#101626');
+      ctx.fillStyle = strataGradBottom;
+      ctx.fillRect(0, tunnelBottom, w, h - tunnelBottom);
+
+      // Soil texture lines
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
       ctx.lineWidth = 1;
-      for (let y = 15; y < h; y += 25) {
+      for (let gy = 10; gy < tunnelTop; gy += 12) {
         ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(w, y);
+        ctx.moveTo(0, gy);
+        ctx.lineTo(w, gy);
+        ctx.stroke();
+      }
+      for (let gy = tunnelBottom + 10; gy < h; gy += 12) {
+        ctx.beginPath();
+        ctx.moveTo(0, gy);
+        ctx.lineTo(w, gy);
         ctx.stroke();
       }
 
-      const pipeStartX = 50;
-      const tbmLength = 220;
-      const headX = w * 0.65;
-      const tailX = headX - tbmLength;
-
-      const segWidth = 80;
-      for (let px = pipeStartX; px < tailX; px += segWidth) {
-        ctx.fillStyle = '#222f4d';
-        ctx.fillRect(px, tunnelTop, segWidth - 4, tunnelHeight);
-        ctx.strokeStyle = '#3b4e7a';
-        ctx.strokeRect(px, tunnelTop, segWidth - 4, tunnelHeight);
-
-        ctx.strokeStyle = '#00d2ff22';
-        ctx.beginPath();
-        ctx.moveTo(px + segWidth - 4, tunnelTop);
-        ctx.lineTo(px + segWidth - 4, tunnelBottom);
-        ctx.stroke();
-      }
-
-      ctx.strokeStyle = 'rgba(255, 0, 85, 0.4)';
-      ctx.lineWidth = 2;
-      ctx.setLineDash([8, 4]);
+      // Tunnel excavation boundary lines
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.moveTo(0, h * 0.5);
-      ctx.lineTo(tailX + 40, h * 0.5 + (steeringAngle * 0.8));
+      ctx.moveTo(0, tunnelTop);
+      ctx.lineTo(w * 0.82, tunnelTop);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(0, tunnelBottom);
+      ctx.lineTo(w * 0.82, tunnelBottom);
+      ctx.stroke();
+
+      // Laser Guidance Beam from TACS Target
+      ctx.strokeStyle = 'rgba(239, 68, 68, 0.5)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([10, 6]);
+      ctx.beginPath();
+      ctx.moveTo(0, tunnelMidY);
+      ctx.lineTo(w * 0.62, tunnelMidY + (steeringAngle * 1.2));
       ctx.stroke();
       ctx.setLineDash([]);
 
-      ctx.save();
-      ctx.translate(tailX, tunnelTop);
-      ctx.rotate((steeringAngle * Math.PI) / 180 * 0.05);
-
-      const gradShield = ctx.createLinearGradient(0, 0, 0, tunnelHeight);
-      gradShield.addColorStop(0, '#3a4d78');
-      gradShield.addColorStop(0.5, '#546b9e');
-      gradShield.addColorStop(1, '#2a3859');
-      ctx.fillStyle = gradShield;
-      ctx.fillRect(0, 0, tbmLength, tunnelHeight);
-      ctx.strokeStyle = '#00d2ff';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(0, 0, tbmLength, tunnelHeight);
-
-      ctx.strokeStyle = '#ff9100';
-      ctx.lineWidth = 3;
+      // Laser glowing dot
+      ctx.fillStyle = '#ff3d71';
       ctx.beginPath();
-      ctx.moveTo(tbmLength * 0.65, 0);
-      ctx.lineTo(tbmLength * 0.65, tunnelHeight);
-      ctx.stroke();
-
-      ctx.fillStyle = '#ff9100';
-      ctx.fillRect(tbmLength * 0.5, 20, 35, 12);
-      ctx.fillRect(tbmLength * 0.5, tunnelHeight - 32, 35, 12);
-
-      ctx.fillStyle = '#00e676';
-      ctx.fillRect(tbmLength * 0.3, -10, 30, 10);
-      ctx.fillRect(tbmLength * 0.3, tunnelHeight, 30, 10);
-
-      const cutterX = tbmLength;
-      const cutterRadius = tunnelHeight * 0.52;
-      const cutterCenterY = tunnelHeight * 0.5;
-
-      ctx.save();
-      ctx.translate(cutterX, cutterCenterY);
-      ctx.rotate((cutterAngle * Math.PI) / 180);
-
-      ctx.fillStyle = '#1c2842';
-      ctx.beginPath();
-      ctx.arc(0, 0, cutterRadius, -Math.PI / 2, Math.PI / 2);
-      ctx.closePath();
+      ctx.arc(w * 0.62, tunnelMidY + (steeringAngle * 1.2), 3.5, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = '#00f2fe';
-      ctx.lineWidth = 3;
-      ctx.stroke();
 
-      for (let a = 0; a < Math.PI * 2; a += Math.PI / 3) {
-        ctx.strokeStyle = '#00d2ff';
+      // Layout geometry
+      const headX = w * 0.72;             // Cutterhead face X
+      const frontShieldLen = 105;         // Bohrkopf Front Shield
+      const jointLen = 22;                // Articulation joint
+      const rearShieldLen = 115;          // Rear shield (Antrieb/Lasteinleitung)
+      const tbmTotalLen = frontShieldLen + jointLen + rearShieldLen;
+      const tailX = headX - tbmTotalLen;   // Rear of TBM shield
+
+      // =========================================================================
+      // 1. CONCRETE JACKING PIPE SEGMENTS (ĐỐT HẦM BÊ TÔNG KÍCH ĐẨY)
+      // =========================================================================
+      const segWidth = 85;
+      const pipeStartX = 30;
+      const trailerLen = 150;
+      const trailerX = tailX - trailerLen - 10;
+
+      for (let px = pipeStartX; px < tailX; px += segWidth) {
+        const segActualW = Math.min(segWidth - 4, tailX - px);
+        if (segActualW <= 6) break;
+
+        // Pipe Wall Gradient (3D cylindrical concrete)
+        const concGrad = ctx.createLinearGradient(0, tunnelTop, 0, tunnelBottom);
+        concGrad.addColorStop(0, '#475569');
+        concGrad.addColorStop(0.12, '#64748b');
+        concGrad.addColorStop(0.5, '#1e293b');
+        concGrad.addColorStop(0.88, '#64748b');
+        concGrad.addColorStop(1, '#334155');
+
+        ctx.fillStyle = concGrad;
+        ctx.fillRect(px, tunnelTop + 4, segActualW, tunnelHeight - 8);
+
+        // Steel joint collar / compression ring
+        ctx.fillStyle = '#0284c7';
+        ctx.fillRect(px + segActualW - 3, tunnelTop + 3, 3, tunnelHeight - 6);
+
+        // EPDM Rubber Gasket
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(px + segActualW - 5, tunnelTop + 6, 2, tunnelHeight - 12);
+
+        // Pipe outline
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(px, tunnelTop + 4, segActualW, tunnelHeight - 8);
+
+        // Concrete Segment Label
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.font = '9px "JetBrains Mono", monospace';
+        ctx.fillText('PIPE DN1000', px + 10, tunnelMidY - 35);
+      }
+
+      // Concrete pipe invert track (Bottom rail/guide bed)
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(pipeStartX, tunnelBottom - 16, tailX - pipeStartX, 12);
+      ctx.strokeStyle = '#475569';
+      ctx.strokeRect(pipeStartX, tunnelBottom - 16, tailX - pipeStartX, 12);
+
+      // =========================================================================
+      // 2. BACKUP TRAILER (=ppm) WITH 900V TRANSFORMER & SLURRY LINES
+      // =========================================================================
+      if (trailerX > pipeStartX) {
+        // Articulated towing link / hitch to TBM rear
+        ctx.strokeStyle = '#94a3b8';
         ctx.lineWidth = 4;
         ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(Math.cos(a) * cutterRadius, Math.sin(a) * cutterRadius);
+        ctx.moveTo(trailerX + trailerLen, tunnelMidY + 15);
+        ctx.lineTo(tailX, tunnelMidY + 15);
         ctx.stroke();
 
-        ctx.fillStyle = '#ff3d71';
+        // Towing hitch pivots
+        ctx.fillStyle = '#f59e0b';
         ctx.beginPath();
-        ctx.arc(Math.cos(a) * (cutterRadius * 0.75), Math.sin(a) * (cutterRadius * 0.75), 6, 0, Math.PI * 2);
+        ctx.arc(trailerX + trailerLen, tunnelMidY + 15, 4, 0, Math.PI * 2);
+        ctx.arc(tailX, tunnelMidY + 15, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Trailer Main Sled Chassis (Steel Frame)
+        const trTop = tunnelTop + 22;
+        const trBottom = tunnelBottom - 18;
+        const trHeight = trBottom - trTop;
+
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+        ctx.fillRect(trailerX, trTop, trailerLen, trHeight);
+        ctx.strokeStyle = '#eab308';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(trailerX, trTop, trailerLen, trHeight);
+
+        // Diagonal steel frame struts
+        ctx.strokeStyle = 'rgba(234, 179, 8, 0.25)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(trailerX, trTop);
+        ctx.lineTo(trailerX + trailerLen * 0.35, trBottom);
+        ctx.lineTo(trailerX + trailerLen * 0.7, trTop);
+        ctx.lineTo(trailerX + trailerLen, trBottom);
+        ctx.stroke();
+
+        // Heavy Guide Rollers (Bánh lăn tì đáy ống bê tông)
+        const rollerR = 7;
+        const rollerY = tunnelBottom - 18;
+        [trailerX + 22, trailerX + trailerLen * 0.5, trailerX + trailerLen - 22].forEach(rx => {
+          ctx.fillStyle = '#475569';
+          ctx.beginPath();
+          ctx.arc(rx, rollerY, rollerR, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#cbd5e1';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          // Axle hub
+          ctx.fillStyle = '#0284c7';
+          ctx.beginPath();
+          ctx.arc(rx, rollerY, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // 900V Transformer Enclosure (-T15.2) on Trailer
+        const trafoX = trailerX + 12;
+        const trafoY = trTop + 8;
+        const trafoW = 46;
+        const trafoH = trHeight * 0.52;
+
+        ctx.fillStyle = '#1e1b4b';
+        ctx.fillRect(trafoX, trafoY, trafoW, trafoH);
+        ctx.strokeStyle = '#818cf8';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(trafoX, trafoY, trafoW, trafoH);
+
+        // Cooling Fins on Trafo
+        ctx.strokeStyle = '#4338ca';
+        ctx.lineWidth = 1;
+        for (let fx = trafoX + 5; fx < trafoX + trafoW - 4; fx += 5) {
+          ctx.beginPath();
+          ctx.moveTo(fx, trafoY + 3);
+          ctx.lineTo(fx, trafoY + trafoH - 3);
+          ctx.stroke();
+        }
+
+        // 900V Danger Label & Lightning symbol
+        ctx.fillStyle = '#facc15';
+        ctx.font = 'bold 8px "JetBrains Mono", monospace';
+        ctx.fillText('900V', trafoX + 6, trafoY + 12);
+        ctx.fillText('-T15.2', trafoX + 6, trafoY + trafoH - 4);
+
+        // Slurry Booster Valve Manifold on Trailer
+        const vManX = trailerX + 65;
+        const vManY = trTop + 10;
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(vManX, vManY, 32, 22);
+        ctx.strokeStyle = '#0284c7';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(vManX, vManY, 32, 22);
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = '7.5px "JetBrains Mono", monospace';
+        ctx.fillText('BOOSTER', vManX + 2, vManY + 9);
+        ctx.fillText('PUMP', vManX + 7, vManY + 18);
+
+        // Cable Drag Chain / Tray on top of Trailer
+        ctx.fillStyle = '#0b0f19';
+        ctx.fillRect(trailerX + 10, trTop - 6, trailerLen - 20, 6);
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(trailerX + 10, trTop - 6, trailerLen - 20, 6);
+
+        // Purple Profibus-DP Cable running along trailer into TBM
+        ctx.strokeStyle = '#a855f7';
+        ctx.lineWidth = 2.5;
+        ctx.setLineDash([6, 3]);
+        ctx.beginPath();
+        ctx.moveTo(pipeStartX, trTop - 3);
+        ctx.lineTo(tailX + 25, trTop - 3);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Trailer Header Text
+        ctx.fillStyle = '#facc15';
+        ctx.font = 'bold 8.5px "JetBrains Mono", monospace';
+        ctx.fillText('TRAILER =ppm (BACKUP SLED)', trailerX + 8, trBottom - 6);
+      }
+
+      // Continuous Slurry Pipes (Feed DN100 Blue & Discharge DN150 Orange)
+      const feedPipeY = tunnelMidY - 14;
+      const dischPipeY = tunnelMidY + 28;
+
+      // Blue Feed Line DN100
+      ctx.strokeStyle = '#2563eb';
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(pipeStartX, feedPipeY);
+      ctx.lineTo(headX - 35, feedPipeY);
+      ctx.stroke();
+
+      // Orange Discharge Line DN150
+      ctx.strokeStyle = '#ea580c';
+      ctx.lineWidth = 7;
+      ctx.beginPath();
+      ctx.moveTo(pipeStartX, dischPipeY);
+      ctx.lineTo(headX - 42, dischPipeY);
+      ctx.stroke();
+
+      // Slurry pulsing flow dots inside pipes
+      const pulseTime = Date.now() * 0.06;
+      ctx.fillStyle = '#93c5fd';
+      for (let sx = pipeStartX + (pulseTime % 30); sx < headX - 40; sx += 30) {
+        ctx.beginPath();
+        ctx.arc(sx, feedPipeY, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = '#fed7aa';
+      for (let sx = headX - 45 - (pulseTime % 30); sx > pipeStartX; sx -= 30) {
+        ctx.beginPath();
+        ctx.arc(sx, dischPipeY, 2.3, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      ctx.restore();
+      // =========================================================================
+      // 3. TBM SHIELD BODY: REAR SHIELD + 3D STEERING ARTICULATION JOINT
+      // =========================================================================
+      const rearX = tailX;
+      const rearW = rearShieldLen;
+      const shTop = tunnelTop + 3;
+      const shBottom = tunnelBottom - 3;
+      const shHeight = shBottom - shTop;
 
-      if (jetActive && !isEStop) {
-        ctx.strokeStyle = 'rgba(0, 210, 255, 0.8)';
-        ctx.lineWidth = 2;
-        for (let i = 0; i < 5; i++) {
+      // Rear Shield Gradient
+      const rearGrad = ctx.createLinearGradient(rearX, 0, rearX + rearW, 0);
+      rearGrad.addColorStop(0, '#1e293b');
+      rearGrad.addColorStop(0.7, '#334155');
+      rearGrad.addColorStop(1, '#1e293b');
+
+      ctx.fillStyle = rearGrad;
+      ctx.fillRect(rearX, shTop, rearW, shHeight);
+      ctx.strokeStyle = '#00d2ff';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(rearX, shTop, rearW, shHeight);
+
+      // Inclinometer -B57 Dual-Axis indicator on Rear Shield
+      const incX = rearX + 22;
+      const incY = tunnelMidY - 38;
+      ctx.fillStyle = '#16a34a';
+      ctx.beginPath();
+      ctx.arc(incX, incY, 10, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#4ade80';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      // Level crosshairs & bubble
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.beginPath();
+      ctx.moveTo(incX - 8, incY); ctx.lineTo(incX + 8, incY);
+      ctx.moveTo(incX, incY - 8); ctx.lineTo(incX, incY + 8);
+      ctx.stroke();
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(incX + laserOffsetX * 0.8, incY + laserOffsetY * 0.5, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#4ade80';
+      ctx.font = 'bold 8px "JetBrains Mono", monospace';
+      ctx.fillText('INC -B57', incX - 16, incY + 18);
+
+      // Turck PicoNet I/O Station (-K1 / -K2) on Rear Shield
+      const turckX = rearX + 58;
+      const turckY = tunnelMidY - 42;
+      ctx.fillStyle = '#581c87';
+      ctx.fillRect(turckX, turckY, 44, 26);
+      ctx.strokeStyle = '#a855f7';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(turckX, turckY, 44, 26);
+
+      // Turck Status LEDs (Blinking green/amber)
+      ctx.fillStyle = (Date.now() % 400 < 200) ? '#00e676' : '#22c55e';
+      ctx.beginPath();
+      ctx.arc(turckX + 8, turckY + 8, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#f59e0b';
+      ctx.beginPath();
+      ctx.arc(turckX + 16, turckY + 8, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#c084fc';
+      ctx.font = 'bold 7px "JetBrains Mono", monospace';
+      ctx.fillText('TURCK DP', turckX + 4, turckY + 20);
+
+      // Rear Shield Text
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = 'bold 9px "JetBrains Mono", monospace';
+      ctx.fillText('REAR SHIELD (KHIÊN SAU)', rearX + 10, shBottom - 10);
+
+      // =========================================================================
+      // 4. 3D ARTICULATION JOINT & STEERING CYLINDERS (-B54..56)
+      // =========================================================================
+      const jointX = rearX + rearW;
+      const jointW = jointLen;
+
+      // Flexible accordion bellows seal (Khớp cao su kín nước)
+      ctx.fillStyle = '#090d16';
+      ctx.fillRect(jointX, shTop + 3, jointW, shHeight - 6);
+      ctx.strokeStyle = '#475569';
+      ctx.lineWidth = 1;
+      for (let jx = jointX + 4; jx < jointX + jointW; jx += 5) {
+        ctx.beginPath();
+        ctx.moveTo(jx, shTop + 4);
+        ctx.lineTo(jx, shBottom - 4);
+        ctx.stroke();
+      }
+
+      // Hydraulic Steering Cylinders bridging the articulation joint
+      // Top Ram (0° - Item 10)
+      const topRamY = shTop + 14;
+      const topStrokeExt = (steerCylStates[10] === 'up') ? 6 : ((steerCylStates[10] === 'down') ? -6 : (steeringAngle * 0.8));
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(jointX - 10, topRamY - 4, 14, 8); // Cylinder barrel
+      ctx.fillStyle = '#e2e8f0';
+      ctx.fillRect(jointX + 4, topRamY - 2.5, jointW - 4 + topStrokeExt, 5); // Chrome rod
+      ctx.strokeStyle = '#ef4444';
+      ctx.strokeRect(jointX - 10, topRamY - 4, jointW + topStrokeExt + 4, 8);
+
+      // Bottom-Right / Bottom Ram (120° & 240° - Item 11 & 12)
+      const botRamY = shBottom - 16;
+      const botStrokeExt = (steerCylStates[11] === 'up' || steerCylStates[12] === 'up') ? 6 : -topStrokeExt;
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(jointX - 10, botRamY - 4, 14, 8);
+      ctx.fillStyle = '#e2e8f0';
+      ctx.fillRect(jointX + 4, botRamY - 2.5, jointW - 4 + botStrokeExt, 5);
+      ctx.strokeStyle = '#ef4444';
+      ctx.strokeRect(jointX - 10, botRamY - 4, jointW + botStrokeExt + 4, 8);
+
+      // =========================================================================
+      // 5. FRONT SHIELD (BOHRKOPF =bk) & STEERING TILT
+      // =========================================================================
+      const frontX = jointX + jointW;
+      const frontW = frontShieldLen;
+
+      ctx.save();
+      // Pivot articulation at joint center
+      ctx.translate(jointX + jointW * 0.5, tunnelMidY);
+      const radTilt = (steeringAngle * Math.PI) / 180 * 0.08;
+      ctx.rotate(radTilt);
+      ctx.translate(-(jointX + jointW * 0.5), -tunnelMidY);
+
+      // Front Shield Hull Gradient
+      const frontGrad = ctx.createLinearGradient(frontX, 0, frontX + frontW, 0);
+      frontGrad.addColorStop(0, '#1e293b');
+      frontGrad.addColorStop(0.4, '#3b82f6');
+      frontGrad.addColorStop(0.7, '#1d4ed8');
+      frontGrad.addColorStop(1, '#0f172a');
+
+      ctx.fillStyle = frontGrad;
+      ctx.fillRect(frontX, shTop, frontW, shHeight);
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(frontX, shTop, frontW, shHeight);
+
+      // Anti-Roll Stabilizer Wings (Cánh chống xoay lật Fin Extend -S2.13)
+      const finExtended = (steerCylStates[13] === 'up');
+      const finH = finExtended ? 16 : 5;
+      // Top Fin
+      ctx.fillStyle = finExtended ? '#22c55e' : '#475569';
+      ctx.fillRect(frontX + 30, shTop - finH, 32, finH);
+      ctx.strokeStyle = '#86efac';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(frontX + 30, shTop - finH, 32, finH);
+      // Bottom Fin
+      ctx.fillStyle = finExtended ? '#22c55e' : '#475569';
+      ctx.fillRect(frontX + 30, shBottom, 32, finH);
+      ctx.strokeStyle = '#86efac';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(frontX + 30, shBottom, 32, finH);
+
+      // 132kW Cutter Motor (-M15.1) Enclosure
+      const mX = frontX + 8;
+      const mY = tunnelMidY - 24;
+      const mW = 38;
+      const mH = 48;
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(mX, mY, mW, mH);
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(mX, mY, mW, mH);
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 8px "JetBrains Mono", monospace';
+      ctx.fillText('-M15.1', mX + 4, mY + 16);
+      ctx.fillText('132kW', mX + 5, mY + 28);
+      ctx.fillText('900V', mX + 8, mY + 40);
+
+      // Main Gearbox & Bearing
+      const gbX = frontX + 48;
+      ctx.fillStyle = '#334155';
+      ctx.fillRect(gbX, tunnelMidY - 30, 16, 60);
+      ctx.strokeStyle = '#94a3b8';
+      ctx.strokeRect(gbX, tunnelMidY - 30, 16, 60);
+
+      // Slurry Pressure Sensor (-B242) with digital readout
+      const pB242Y = shBottom - 26;
+      ctx.fillStyle = '#0284c7';
+      ctx.beginPath();
+      ctx.arc(frontX + 35, pB242Y, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#38bdf8';
+      ctx.stroke();
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 7.5px "JetBrains Mono", monospace';
+      ctx.fillText('P -B242', frontX + 18, pB242Y - 10);
+      ctx.fillText('1.85 bar', frontX + 16, pB242Y + 18);
+
+      // Slurry Chamber (Buồng bùn & Nón nghiền Crusher Cone)
+      const chX = frontX + 66;
+      const chW = frontW - 66;
+      ctx.fillStyle = 'rgba(2, 132, 199, 0.22)';
+      ctx.beginPath();
+      ctx.moveTo(chX, shTop + 6);
+      ctx.lineTo(chX + chW, shTop + 2);
+      ctx.lineTo(chX + chW, shBottom - 2);
+      ctx.lineTo(chX, shBottom - 6);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#0284c7';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Crusher Cone teeth inside slurry chamber
+      ctx.fillStyle = '#64748b';
+      for (let cy = shTop + 22; cy < shBottom - 20; cy += 18) {
+        ctx.beginPath();
+        ctx.moveTo(chX + 10, cy);
+        ctx.lineTo(chX + 22, cy - 6);
+        ctx.lineTo(chX + 22, cy + 6);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // Camera IP68 (-P10.1) & LED Floodlight (-E9.1)
+      const camX = frontX + 70;
+      const camY = shTop + 18;
+      ctx.fillStyle = '#eab308';
+      ctx.fillRect(camX, camY, 18, 12);
+      ctx.strokeStyle = '#facc15';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(camX, camY, 18, 12);
+      ctx.fillStyle = '#000000';
+      ctx.beginPath();
+      ctx.arc(camX + 13, camY + 6, 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Glowing Light Cone from LED -E9.1 illuminating the cutter face
+      const lightGrad = ctx.createRadialGradient(camX + 14, camY + 6, 2, camX + 60, camY + 25, 65);
+      lightGrad.addColorStop(0, 'rgba(250, 204, 21, 0.45)');
+      lightGrad.addColorStop(0.5, 'rgba(250, 204, 21, 0.15)');
+      lightGrad.addColorStop(1, 'rgba(250, 204, 21, 0)');
+      ctx.fillStyle = lightGrad;
+      ctx.beginPath();
+      ctx.moveTo(camX + 14, camY + 4);
+      ctx.lineTo(headX + 45, camY - 20);
+      ctx.lineTo(headX + 45, camY + 60);
+      ctx.closePath();
+      ctx.fill();
+
+      // Front Shield Labels
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 9px "JetBrains Mono", monospace';
+      ctx.fillText('BOHRKOPF (=bk)', frontX + 8, shTop + 16);
+
+      // =========================================================================
+      // 6. CUTTERHEAD DISC (MÂM CẮT SCHÜRFRAD) WITH ALLOY TEETH & DISC CUTTERS
+      // =========================================================================
+      const cDiscX = frontX + frontW;
+      const cRadius = (tunnelHeight * 0.52);
+
+      ctx.save();
+      ctx.translate(cDiscX, tunnelMidY);
+
+      // Steel Disc Backing Rim
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath();
+      ctx.arc(0, 0, cRadius, -Math.PI / 2, Math.PI / 2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      // Rotate Cutter Disc Face
+      ctx.save();
+      ctx.rotate((cutterAngle * Math.PI) / 180);
+
+      // Cutterhead Structural Spokes (Schürfrad arms)
+      const numSpokes = 6;
+      for (let s = 0; s < numSpokes; s++) {
+        const ang = (s * Math.PI * 2) / numSpokes;
+        const cosA = Math.cos(ang);
+        const sinA = Math.sin(ang);
+
+        // Heavy Spoke Beam
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 14;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(cosA * (cRadius - 4), sinA * (cRadius - 4));
+        ctx.stroke();
+
+        ctx.strokeStyle = '#64748b';
+        ctx.lineWidth = 8;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(cosA * (cRadius - 4), sinA * (cRadius - 4));
+        ctx.stroke();
+
+        // Roller Disc Cutters (Đĩa cắt phá đá hợp kim) on outer spoke ring
+        const rDiscDist = cRadius * 0.72;
+        ctx.fillStyle = '#f8fafc';
+        ctx.beginPath();
+        ctx.arc(cosA * rDiscDist, sinA * rDiscDist, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#0284c7';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        // Disc Cutter center bolt
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.arc(cosA * rDiscDist, sinA * rDiscDist, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Intermediate Chisel Teeth on spoke
+        const midTeethDist = cRadius * 0.42;
+        ctx.fillStyle = '#eab308';
+        ctx.beginPath();
+        ctx.arc(cosA * midTeethDist, sinA * midTeethDist, 4.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#ca8a04';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
+
+      // Outer Circumferential Cutter Teeth (Răng cào gọt hợp kim màu vàng)
+      const numTeeth = 14;
+      for (let t = 0; t < numTeeth; t++) {
+        const tang = (t * Math.PI * 2) / numTeeth;
+        const tx = Math.cos(tang) * cRadius;
+        const ty = Math.sin(tang) * cRadius;
+
+        ctx.save();
+        ctx.translate(tx, ty);
+        ctx.rotate(tang);
+
+        // Tungsten carbide cutter tooth polygon
+        ctx.fillStyle = '#eab308';
+        ctx.beginPath();
+        ctx.moveTo(0, -6);
+        ctx.lineTo(10, 0);
+        ctx.lineTo(0, 6);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#facc15';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      // Center High-Pressure Water Jet Nozzle Hub
+      ctx.fillStyle = '#0284c7';
+      ctx.beginPath();
+      ctx.arc(0, 0, 16, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(0, 0, 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore(); // End Disc Face Rotation
+
+      // Dynamic High Pressure Water Jet Spray (Khi bật Jet Valve)
+      const isJetActive = jetActive || jetOpen;
+      if (isJetActive && isRunning) {
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.85)';
+        ctx.lineWidth = 2.5;
+        for (let j = 0; j < 8; j++) {
+          const spreadY = (Math.random() - 0.5) * (cRadius * 1.5);
+          const reachX = 25 + Math.random() * 45;
           ctx.beginPath();
-          ctx.moveTo(cutterX, cutterCenterY - 40 + i * 20);
-          ctx.lineTo(cutterX + 35 + Math.random() * 15, cutterCenterY - 50 + i * 25);
+          ctx.moveTo(0, 0);
+          ctx.lineTo(reachX, spreadY);
           ctx.stroke();
+
+          // Water mist droplet
+          ctx.fillStyle = 'rgba(186, 230, 253, 0.9)';
+          ctx.beginPath();
+          ctx.arc(reachX, spreadY, 2 + Math.random() * 2, 0, Math.PI * 2);
+          ctx.fill();
         }
       }
 
-      ctx.restore();
+      // Rock & Soil Excavation Face Profile Ahead of Cutterhead
+      ctx.fillStyle = '#1e293b';
+      ctx.beginPath();
+      ctx.moveTo(12, -cRadius - 6);
+      ctx.quadraticCurveTo(28, 0, 12, cRadius + 6);
+      ctx.lineTo(w - cDiscX, cRadius + 6);
+      ctx.lineTo(w - cDiscX, -cRadius - 6);
+      ctx.closePath();
+      ctx.fill();
 
-      if (!isEStop) {
+      // Rock chips and muck agitated by cutterhead rotation
+      if (isRunning && Math.abs(cutterSpeedPct) > 5) {
+        rockParticles.forEach(p => {
+          p.x -= p.vx;
+          p.y += p.vy;
+          if (p.x < -40) {
+            p.x = 10 + Math.random() * 20;
+            p.y = (Math.random() - 0.5) * cRadius * 1.6;
+          }
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+
+      ctx.restore(); // End Cutterhead transform
+      ctx.restore(); // End Articulation tilt transform
+
+      // Update Telemetry & SCADA displays
+      if (isRunning) {
         const rpmVal = ((cutterSpeedPct / 100) * 5.8).toFixed(1);
         const presVal = Math.round(110 + (cutterSpeedPct * 1.2));
         const speedVal = ((jackSpeedPct / 100) * 38.0).toFixed(1);
@@ -9725,22 +10746,11 @@
     }
 
     animate();
+
   
     // =========================================================================
     // FIGURE 3.5 CONTROL PANEL & VISAM SCADA CONTROLLERS
     // =========================================================================
-    let eStopTripped = false;
-    let bypassOpen = false;
-    let jetOpen = true;
-    let mainEngineRunning = true;
-    let chargePumpRunning = true;
-    let feedPumpRunning = true;
-    let boosterPumpRunning = false;
-    let cuttingDiscState = 'CW'; // 'LEFT', 'STOP', 'CW' (RIGHT)
-    let jackingState = 'ADV'; // 'RET', 'STOP', 'ADV'
-    let steerCylStates = { 10: 'mid', 11: 'mid', 12: 'mid', 13: 'down', 24: 'down', 25: 'up', 26: 'up' };
-    let flushModeIdx = 2; // 0: SETUP, 1: MANUAL, 2: AUTOMATIC
-    const flushModes = ['SETUP', 'MANUAL', 'AUTOMATIC'];
 
     /* =========================================================================
        AUTHENTIC SIEMENS S7-300 PLC LOGIC FOR FIGURE 3.5 CONTROL PANEL (=cc)

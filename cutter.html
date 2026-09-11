@@ -1,0 +1,480 @@
+```html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sơ Đồ Kỹ Thuật Chi Tiết Đầu Cắt MTS 1000 (Bohrkopf =bk)</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-blue: #38bdf8;
+            --accent-green: #22c55e;
+            --accent-yellow: #eab308;
+            --accent-red: #ef4444;
+            --accent-purple: #a855f7;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: var(--accent-blue);
+            margin-bottom: 5px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .canvas-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .svg-container {
+            width: 100%;
+            height: auto;
+            background: #020617;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #1e293b;
+        }
+
+        svg component-node {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        svg .component-node:hover {
+            filter: drop-shadow(0 0 8px var(--accent-blue));
+            opacity: 0.9;
+        }
+
+        .info-panel {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .panel-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background: #0f172a;
+            padding: 10px 12px;
+            border-radius: 6px;
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        .detail-item .label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-item .value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            background: #0f172a;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .color-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .table-section {
+            margin-top: 25px;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #0f172a;
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #1e293b;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .tag-analog { background: #0284c7; color: #fff; }
+        .tag-digital { background: #16a34a; color: #fff; }
+        .tag-valve { background: #d97706; color: #fff; }
+        .tag-counter { background: #9333ea; color: #fff; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>CẤU TẠO CHI TIẾT ĐẦU CẮT BOHRKOPF (=bk) - MTS 1000</h1>
+        <p>Sơ đồ tổng hợp Cơ khí, Mạch Bùn, Hệ thống Lái 3D, Cảm biến & Cụm I/O Phân tán Turck PicoNet</p>
+    </header>
+
+    <div class="main-layout">
+        <!-- SVG Canvas Card -->
+        <div class="canvas-card">
+            <div class="svg-container">
+                <svg viewBox="0 0 960 620" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background Grid -->
+                    <defs>
+                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect width="960" height="620" fill="url(#grid)" />
+
+                    <!-- Main Outer Housing Shell -->
+                    <rect x="120" y="80" width="680" height="440" rx="20" fill="#0f172a" stroke="#334155" stroke-width="3" />
+                    <text x="140" y="110" fill="#64748b" font-size="14" font-weight="bold">THÂN ĐẦU KHIÊN (DRILLING HEAD SHELL =bk)</text>
+
+                    <!-- SECTION 1: CUTTER DISC (Front) -->
+                    <g class="component-node" onclick="showDetails('Cutter Disc', 'Mâm Cắt Gọt Đất Đá', '-M15.1 (132kW Motor)', 'Cảm biến đếm xung RPM -B1 (EW478) đấu về Module -K2.1', 'Cấu tạo từ thép chịu lực gắn các răng hợp kim gọt vách hầm')">
+                        <path d="M 120 120 L 170 120 L 170 480 L 120 480 Z" fill="#38bdf8" fill-opacity="0.2" stroke="#38bdf8" stroke-width="2"/>
+                        <!-- Cutter Teeth -->
+                        <polygon points="105,150 120,140 120,160" fill="#eab308"/>
+                        <polygon points="105,250 120,240 120,260" fill="#eab308"/>
+                        <polygon points="105,350 120,340 120,360" fill="#eab308"/>
+                        <polygon points="105,450 120,440 120,460" fill="#eab308"/>
+                        <text x="130" y="300" fill="#38bdf8" font-size="12" font-weight="bold" transform="rotate(-90 135 300)">ĐĨA CẮT (CUTTING DISC)</text>
+                    </g>
+
+                    <!-- RPM Sensor -->
+                    <g class="component-node" onclick="showDetails('RPM Sensor (-B1)', 'Cảm Biến Đếm Tốc Độ Vòng Quay Đĩa Cắt', 'Tín hiệu: EW478 / EW483', 'Module: Turck PicoNet -K2.1 (Port 1)', 'Mã mts-No.: 85086')">
+                        <circle cx="170" cy="180" r="10" fill="#a855f7"/>
+                        <text x="185" y="184" fill="#a855f7" font-size="11" font-weight="bold">RPM Sensor -B1</text>
+                    </g>
+
+                    <!-- SECTION 2: CRUSHER CONE & SLURRY CHAMBER -->
+                    <g class="component-node" onclick="showDetails('Slurry Chamber & Crusher', 'Khoang Bùn & Nón Nghiền Đá', 'Áp suất: -B242 (EW374)', 'Dung dịch bùn Bentonite giữ ổn định mặt gương hầm', 'Nón nghiền nghiền nhỏ đá trước khi hút qua đường xả')">
+                        <path d="M 170 140 L 290 170 L 290 430 L 170 460 Z" fill="#0284c7" fill-opacity="0.15" stroke="#0284c7" stroke-width="2" stroke-dasharray="4"/>
+                        <text x="200" y="300" fill="#38bdf8" font-size="12" font-weight="bold">NÓN NGHIỀN &amp; KHOANG BÙN</text>
+                    </g>
+
+                    <!-- Camera & Lamp -->
+                    <g class="component-node" onclick="showDetails('Camera & Lamp', 'Camera IP68 & Đèn LED Chiếu Sáng', 'Camera -P10.1 (mts-No. 85077) / Lamp -E9.1', 'Nguồn 24VDC, Bộ truyền Video -B10.1 (mts-No. 30949)', 'Giám sát trực tiếp hình ảnh gương hầm hầm')">
+                        <rect x="200" y="155" width="50" height="25" rx="4" fill="#eab308" fill-opacity="0.3" stroke="#eab308"/>
+                        <text x="205" y="172" fill="#eab308" font-size="10" font-weight="bold">CAM / LAMP</text>
+                    </g>
+
+                    <!-- Pressure Sensor Slurry Chamber -->
+                    <g class="component-node" onclick="showDetails('Slurry Pressure (-B242)', 'Cảm Biến Áp Lực Buồng Đào Bùn', 'EW374 / PIW374 (0-10 bar)', 'Module: Turck PicoNet -K1.1 (Port 2)', 'Đo áp lực cân bằng đất giữ thăng bằng gương hầm')">
+                        <circle cx="250" cy="410" r="10" fill="#0284c7"/>
+                        <text x="200" y="440" fill="#38bdf8" font-size="11" font-weight="bold">P Slurry -B242</text>
+                    </g>
+
+                    <!-- SECTION 3: BYPASS & JET VALVE ASSEMBLY -->
+                    <g class="component-node" onclick="showDetails('Bypass & Jet Valves', 'Cụm Van Bùn Bypass & Jet', 'Coil: -K58/59 (Bypass), -K60/61 (Jet)', 'LS: -B62 (LS Bypass), -B64 (LS Jet)', 'Chuyển đổi linh hoạt giữa Chế độ Đi tắt, Đào chính & Xối rửa Jet')">
+                        <rect x="320" y="140" width="160" height="150" rx="8" fill="#d97706" fill-opacity="0.15" stroke="#d97706" stroke-width="2"/>
+                        <text x="335" y="165" fill="#f59e0b" font-size="12" font-weight="bold">CỤM VAN BYPASS &amp; JET</text>
+                        <!-- Bypass Valve graphic -->
+                        <rect x="340" y="180" width="120" height="35" rx="4" fill="#d97706" fill-opacity="0.4"/>
+                        <text x="350" y="202" fill="#fff" font-size="11">Van Bypass (-K58/59)</text>
+                        <!-- Jet Valve graphic -->
+                        <rect x="340" y="235" width="120" height="35" rx="4" fill="#d97706" fill-opacity="0.4"/>
+                        <text x="360" y="257" fill="#fff" font-size="11">Van Jet (-K60/61)</text>
+                    </g>
+
+                    <!-- SECTION 4: 3D STEERING CYLINDERS (120 deg apart) -->
+                    <g class="component-node" onclick="showDetails('Steering Rams (1,2,3)', 'Hệ Thống 3 Xilanh Bẻ Khớp Lái 3D', 'Solenoid: -K50 đến -K55', 'Sensors: P Steer -B54, -B55, -B56 (EW364,366,368)', 'Bẻ hướng đầu khiên chính xác theo vệt tia Laser TACS')">
+                        <!-- Cyl 1 (Top) -->
+                        <rect x="520" y="110" width="140" height="30" rx="4" fill="#ef4444" fill-opacity="0.2" stroke="#ef4444" stroke-width="2"/>
+                        <text x="530" y="130" fill="#ef4444" font-size="11" font-weight="bold">Xilanh Lái 1 (0° - Top)</text>
+                        <!-- Cyl 2 (Bottom Right) -->
+                        <rect x="520" y="320" width="140" height="30" rx="4" fill="#ef4444" fill-opacity="0.2" stroke="#ef4444" stroke-width="2"/>
+                        <text x="525" y="340" fill="#ef4444" font-size="11" font-weight="bold">Xilanh Lái 2 (120° Right)</text>
+                        <!-- Cyl 3 (Bottom Left) -->
+                        <rect x="520" y="460" width="140" height="30" rx="4" fill="#ef4444" fill-opacity="0.2" stroke="#ef4444" stroke-width="2"/>
+                        <text x="525" y="480" fill="#ef4444" font-size="11" font-weight="bold">Xilanh Lái 3 (240° Left)</text>
+                    </g>
+
+                    <!-- SECTION 5: INCLINOMETER (2-Axis Pitch & Roll) -->
+                    <g class="component-node" onclick="showDetails('Inclinometer (-B57)', 'Cảm Biến Đo Góc Nghiêng 2 Trục (Pitch & Roll)', 'EW370 / PIW370 (+/- 60°)', 'Mã mts-No.: 115223 (Hãng Seika / Novotechnik)', 'Đo góc dốc trục dọc và độ xoay lật thân khiên xung quanh trục hầm')">
+                        <rect x="320" y="320" width="160" height="60" rx="8" fill="#16a34a" fill-opacity="0.2" stroke="#16a34a" stroke-width="2"/>
+                        <circle cx="350" cy="350" r="15" fill="#16a34a"/>
+                        <text x="375" y="348" fill="#4ade80" font-size="12" font-weight="bold">INCLINOMETER</text>
+                        <text x="375" y="364" fill="#94a3b8" font-size="10">-B57 (Pitch &amp; Roll)</text>
+                    </g>
+
+                    <!-- SECTION 6: TURCK PICONET PROFIBUS IO MODULES -->
+                    <g class="component-node" onclick="showDetails('Turck PicoNet Modules', 'Trạm I/O Phân Tán Turck PicoNet IP67', 'Module -K1.1, -K1.2, -K1.3, -K1.4, -K2.1, -K2.2, -K2.3', 'Truyền thông Profibus-DP (12Mbps) về PLC S7-300 Cabin', 'Thu thập toàn bộ cảm biến và điều khiển van chấp hành dưới hầm')">
+                        <rect x="320" y="410" width="160" height="90" rx="8" fill="#a855f7" fill-opacity="0.15" stroke="#a855f7" stroke-width="2"/>
+                        <text x="330" y="432" fill="#c084fc" font-size="12" font-weight="bold">CỤM PICONET I/O</text>
+                        <text x="330" y="452" fill="#e2e8f0" font-size="10">• -K1.1..1.3: 4AI Analog</text>
+                        <text x="330" y="468" fill="#e2e8f0" font-size="10">• -K2.2..2.3: Digital I/O</text>
+                        <text x="330" y="484" fill="#e2e8f0" font-size="10">• -K2.1: Counter 2-Chan</text>
+                    </g>
+
+                    <!-- Inter-connection Cable Lines (Profibus / Power) -->
+                    <path d="M 480 455 L 720 455" stroke="#a855f7" stroke-width="3" stroke-dasharray="6,4"/>
+                    <text x="530" y="445" fill="#c084fc" font-size="11" font-weight="bold">Cáp Tím Profibus-DP về Cabin</text>
+
+                </svg>
+            </div>
+
+            <!-- Legend Grid -->
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="color-dot" style="background: #38bdf8;"></div>
+                    <span>Cơ cấu Mâm cắt / Đĩa gọt</span>
+                </div>
+                <div class="legend-item">
+                    <div class="color-dot" style="background: #0284c7;"></div>
+                    <span>Cảm biến Tương tự (4-20mA)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="color-dot" style="background: #d97706;"></div>
+                    <span>Cụm Van Điện từ / Solenoids</span>
+                </div>
+                <div class="legend-item">
+                    <div class="color-dot" style="background: #ef4444;"></div>
+                    <span>Xilanh Lái 3D (0°, 120°, 240°)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="color-dot" style="background: #16a34a;"></div>
+                    <span>Cảm biến Độ nghiêng Inclinometer</span>
+                </div>
+                <div class="legend-item">
+                    <div class="color-dot" style="background: #a855f7;"></div>
+                    <span>Module Turck PicoNet I/O</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side Info Panel -->
+        <div class="info-panel">
+            <div class="panel-header" id="panel-title">THÔNG TIN THIẾT BỊ</div>
+            
+            <div class="detail-item">
+                <span class="label">Tên Thành Phần / Ký Hiệu</span>
+                <span class="value" id="comp-name">Chọn một phần tử trên sơ đồ</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="label">Mô Tả Chức Năng Kỹ Thuật</span>
+                <span class="value" id="comp-func">Bấm vào bất kỳ khối nào bên sơ đồ để xem thông số chi tiết</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="label">Tín Hiệu / Địa Chỉ PLC</span>
+                <span class="value" id="comp-signal">-</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="label">Module Đấu Nối / Vị Trí</span>
+                <span class="value" id="comp-module">-</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="label">Ghi Chú Vận Hành &amp; Bảo Trì</span>
+                <span class="value" id="comp-note">-</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Component Summary Table -->
+    <div class="table-section">
+        <div class="panel-header" style="margin-bottom: 15px;">DANH MỤC THIẾT BỊ ĐIỆN &amp; CẢM BIẾN TẠI ĐẦU KHIÊN (=bk)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Ký Hiệu</th>
+                    <th>Tên Thiết Bị / Cảm Biến</th>
+                    <th>Loại Tín Hiệu</th>
+                    <th>Địa Chỉ PLC / Tín Hiệu</th>
+                    <th>Module Turck PicoNet</th>
+                    <th>Mã Đặt Hàng (mts-No.)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>-B1</strong></td>
+                    <td>Cảm biến đếm tốc độ đĩa cắt (RPM)</td>
+                    <td><span class="tag tag-counter">Counter</span></td>
+                    <td>EW478 / EW483</td>
+                    <td>-K2.1 (DP-Adr. 30)</td>
+                    <td>85086</td>
+                </tr>
+                <tr>
+                    <td><strong>-B242</strong></td>
+                    <td>Cảm biến áp lực buồng đào bùn</td>
+                    <td><span class="tag tag-analog">Analog 4-20mA</span></td>
+                    <td>EW374 / PIW374 (0-10 bar)</td>
+                    <td>-K1.1 (DP-Adr. 23)</td>
+                    <td>85125</td>
+                </tr>
+                <tr>
+                    <td><strong>-B57</strong></td>
+                    <td>Cảm biến độ nghiêng 2 trục (Inclinometer)</td>
+                    <td><span class="tag tag-analog">Analog 4-20mA</span></td>
+                    <td>EW370 / PIW370 (+/- 60°)</td>
+                    <td>-K1.2 (DP-Adr. 22)</td>
+                    <td>115223</td>
+                </tr>
+                <tr>
+                    <td><strong>-B54..56</strong></td>
+                    <td>Cảm biến áp suất xilanh lái 1, 2, 3</td>
+                    <td><span class="tag tag-analog">Analog 4-20mA</span></td>
+                    <td>EW364, EW366, EW368</td>
+                    <td>-K1.2 (DP-Adr. 22)</td>
+                    <td>85125</td>
+                </tr>
+                <tr>
+                    <td><strong>-B62</strong></td>
+                    <td>Công tắc hành trình van Bypass (Open/Close)</td>
+                    <td><span class="tag tag-digital">Digital Input</span></td>
+                    <td>E52.0 / E52.1</td>
+                    <td>-K2.2 (DP-Adr. 24)</td>
+                    <td>85070</td>
+                </tr>
+                <tr>
+                    <td><strong>-B64</strong></td>
+                    <td>Công tắc hành trình van Jet (Open/Close)</td>
+                    <td><span class="tag tag-digital">Digital Input</span></td>
+                    <td>E52.2 / E52.3</td>
+                    <td>-K2.2 (DP-Adr. 24)</td>
+                    <td>85070</td>
+                </tr>
+                <tr>
+                    <td><strong>-K58..59</strong></td>
+                    <td>Cuộn coil van điện từ Bypass</td>
+                    <td><span class="tag tag-valve">Digital Output</span></td>
+                    <td>A52.0 / A52.1 (24VDC)</td>
+                    <td>-K2.2 (DP-Adr. 24)</td>
+                    <td>85070</td>
+                </tr>
+                <tr>
+                    <td><strong>-K60..61</strong></td>
+                    <td>Cuộn coil van điện từ Jet</td>
+                    <td><span class="tag tag-valve">Digital Output</span></td>
+                    <td>A52.2 / A52.3 (24VDC)</td>
+                    <td>-K2.2 (DP-Adr. 24)</td>
+                    <td>85070</td>
+                </tr>
+                <tr>
+                    <td><strong>-P10.1</strong></td>
+                    <td>Camera giám sát gương hầm IP68</td>
+                    <td><span class="tag tag-analog">Video Signal</span></td>
+                    <td>Nguồn 24VDC / Transmitter -B10.1</td>
+                    <td>Bộ truyền BNC -B10.1</td>
+                    <td>85077</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function showDetails(title, func, signal, module, note) {
+        document.getElementById('panel-title').innerText = title;
+        document.getElementById('comp-name').innerText = title;
+        document.getElementById('comp-func').innerText = func;
+        document.getElementById('comp-signal').innerText = signal;
+        document.getElementById('comp-module').innerText = module;
+        document.getElementById('comp-note').innerText = note;
+    }
+</script>
+
+</body>
+</html>
