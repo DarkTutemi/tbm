@@ -1,0 +1,13 @@
+# Temporary scratch scripts & logs
+scratch/
+*.bak
+*.tmp
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# System generated logs
+.system_generated/
