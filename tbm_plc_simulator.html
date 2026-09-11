@@ -1390,6 +1390,52 @@
       box-shadow: 0 0 12px #ffdd59, inset 0 1px 2px #fff;
     }
 
+    /* Item 00: Emergency Stop Mushroom on Panel Header (+pult-S3.3 / I0.0) */
+    .fig35-estop-btn-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: rgba(255, 61, 113, 0.12);
+      border: 1.5px solid rgba(255, 61, 113, 0.4);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      transition: all 0.2s ease;
+    }
+    .fig35-estop-btn-wrap:hover {
+      background: rgba(255, 61, 113, 0.25);
+      border-color: #ff3d71;
+      transform: scale(1.03);
+    }
+    .fig35-estop-mushroom {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ff4d6d, #b91c1c);
+      border: 3px solid #facc15; /* Yellow safety collar */
+      box-shadow: 0 4px 10px rgba(220, 38, 38, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .fig35-estop-mushroom span {
+      font-size: 7.5px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 2px #000;
+      pointer-events: none;
+    }
+    .fig35-estop-mushroom.tripped {
+      transform: scale(0.85);
+      background: radial-gradient(circle at 50% 50%, #7f1d1d, #450a0a);
+      border-color: #ef4444;
+      box-shadow: 0 0 16px #ef4444, inset 0 3px 6px #000;
+    }
+
     /* 2. Rotary Dial / Potentiometer */
     .dial-wrap {
       display: flex;
@@ -4596,11 +4642,27 @@
 
     <div class="fig35-panel-container">
           <div class="fig35-plate-title">
-            <div>
-              <div class="fig35-plate-heading">FIGURE 3.5. CONTROL PANEL (=cc BEDIENPULT)</div>
-              <div class="fig35-plate-sub">Trích xuất Hồ sơ Pháp lý Tập I - Mục 4.3.1.3 Trang 36 | 33 Phần tử điều khiển (Item 0..32)</div>
+            <div style="display:flex; align-items:center; gap:16px;">
+              <!-- Item 00: Emergency Stop NOT-AUS (+pult-S3.3 / I0.0) -->
+              <div class="fig35-estop-btn-wrap" onclick="toggleFigEStop()" id="btnFigEStop" title="Nhấn để Dừng Khẩn Cấp / Xoay để nhả chốt (+pult-S3.3 / FC61)">
+                <div class="fig35-estop-mushroom" id="figEStopMushroom">
+                  <span>NOT-AUS</span>
+                </div>
+                <div style="display:flex; flex-direction:column;">
+                  <span style="font-size:0.72rem; font-weight:800; color:#ff4d6d; line-height:1.2;">ITEM 00: E-STOP</span>
+                  <span class="fig35-item-bmk" style="margin-top:0; color:#ffdd59; font-size:0.6rem;">+pult-S3.3 (I0.0)</span>
+                </div>
+              </div>
+
+              <div>
+                <div class="fig35-plate-heading">FIGURE 3.5. CONTROL PANEL (=cc BEDIENPULT)</div>
+                <div class="fig35-plate-sub">Trích xuất Hồ sơ Pháp lý Tập I - Mục 4.3.1.3 Trang 36 | Đầy đủ 33 Phần tử điều khiển (Item 0..32)</div>
+              </div>
             </div>
-            <span class="mts-badge">EATON SMARTWIRE-DT</span>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="mts-badge" id="plcFreigabeBadge" style="background:rgba(0, 230, 118, 0.2); border:1px solid #00e676; color:#00e676;">FC61: FREIGABE OK</span>
+              <span class="mts-badge">EATON SMARTWIRE-DT</span>
+            </div>
           </div>
 
           <div class="fig35-rows-wrap">
@@ -9667,6 +9729,7 @@
     // =========================================================================
     // FIGURE 3.5 CONTROL PANEL & VISAM SCADA CONTROLLERS
     // =========================================================================
+    let eStopTripped = false;
     let bypassOpen = false;
     let jetOpen = true;
     let mainEngineRunning = true;
@@ -9679,188 +9742,345 @@
     let flushModeIdx = 2; // 0: SETUP, 1: MANUAL, 2: AUTOMATIC
     const flushModes = ['SETUP', 'MANUAL', 'AUTOMATIC'];
 
-    function actuateFigItem(itemNum) {
-      // Live sync to Photo-Exact VisAM SCADA
-      if (typeof visamRealState !== 'undefined') {
-        if (itemNum === 27) { // Disc Left (CW)
-          visamRealState.cutterRev = 4.5;
-          visamRealState.cutterDir = 'LEFT';
-          visamRealState.cutterPres = 280.0;
-          var lampL = document.getElementById('lampCutterLeft');
-          var lampR = document.getElementById('lampCutterRight');
-          var barC = document.getElementById('barCutterRev');
-          if (lampL) lampL.className = 'visam-lamp-round lit-green';
-          if (lampR) lampR.className = 'visam-lamp-round';
-          if (barC) barC.style.width = '75%';
-          updateVisamTelemetryDOM();
-        } else if (itemNum === 29) { // Disc Right (CCW)
-          visamRealState.cutterRev = 4.5;
-          visamRealState.cutterDir = 'RIGHT';
-          visamRealState.cutterPres = 275.0;
-          var lampL = document.getElementById('lampCutterLeft');
-          var lampR = document.getElementById('lampCutterRight');
-          var barC = document.getElementById('barCutterRev');
-          if (lampL) lampL.className = 'visam-lamp-round';
-          if (lampR) lampR.className = 'visam-lamp-round lit-orange';
-          if (barC) barC.style.width = '75%';
-          updateVisamTelemetryDOM();
-        } else if (itemNum === 28) { // Disc Stop
-          visamRealState.cutterRev = 0.0;
-          visamRealState.cutterDir = 'STOP';
-          visamRealState.cutterPres = 24.6;
-          var lampL = document.getElementById('lampCutterLeft');
-          var lampR = document.getElementById('lampCutterRight');
-          var barC = document.getElementById('barCutterRev');
-          if (lampL) lampL.className = 'visam-lamp-round';
-          if (lampR) lampR.className = 'visam-lamp-round';
-          if (barC) barC.style.width = '0%';
-          updateVisamTelemetryDOM();
-        } else if (itemNum === 30) { // Jacks Forward
-          visamRealState.driveActive = true;
-          visamRealState.jackingForce = 220.0;
-          visamRealState.driveSpeed = 2.40;
-          var barJ = document.getElementById('barJackForce');
-          if (barJ) barJ.style.width = '65%';
-          updateVisamTelemetryDOM();
-        } else if (itemNum === 31) { // Jacks Stop
-          visamRealState.driveActive = false;
-          visamRealState.jackingForce = 0.0;
-          visamRealState.driveSpeed = 0.00;
-          var barJ = document.getElementById('barJackForce');
-          if (barJ) barJ.style.width = '0%';
-          updateVisamTelemetryDOM();
-        } else if (itemNum === 32) { // Jacks Back
-          visamRealState.driveActive = true;
-          visamRealState.jackingForce = 45.0;
-          visamRealState.driveSpeed = 1.80;
-          var barJ = document.getElementById('barJackForce');
-          if (barJ) barJ.style.width = '20%';
-          updateVisamTelemetryDOM();
+    /* =========================================================================
+       AUTHENTIC SIEMENS S7-300 PLC LOGIC FOR FIGURE 3.5 CONTROL PANEL (=cc)
+       Covers all 33 items (Item 0..32) with safety interlocks, memory bits, and VisAM telemetry
+       ========================================================================= */
+
+    function toggleFigEStop() {
+      eStopTripped = !eStopTripped;
+      const mushroom = document.getElementById('figEStopMushroom');
+      const badge = document.getElementById('plcFreigabeBadge');
+
+      if (eStopTripped) {
+        if (mushroom) mushroom.classList.add('tripped');
+        if (badge) {
+          badge.textContent = 'FC61: E-STOP TRIP (M61.0=0)';
+          badge.style.background = 'rgba(255, 61, 113, 0.25)';
+          badge.style.borderColor = '#ff3d71';
+          badge.style.color = '#ff3d71';
         }
+
+        // Siemens S7-300 FC61: Freigabe M61.0 drops to FALSE
+        // Drops all actuator enables instantly:
+        actuateFigItem(6);  // Hydr Main OFF
+        actuateFigItem(28); // Cutter STOP
+        actuateFigItem(31); // Jacks STOP
+        actuateFigItem(4);  // Jet Closed
+        actuateFigItem(9);  // Charge pump OFF
+        actuateFigItem(16); // Feed pump OFF
+        actuateFigItem(22); // Addition pump OFF
+
+        alert('🚨 CẢNH BÁO DỪNG KHẨN CẤP (+pult-S3.3 - MẠCH AN TOÀN FC61):\n' +
+              '- Tiếp điểm an toàn NC I0.0 ĐÃ NGẮT (FALSE)!\n' +
+              '- Cờ liên động an toàn M61.0 (Freigabe) = FALSE -> PLC ngắt toàn bộ phụ tải:\n' +
+              '  + Trạm bơm thủy lực chính 132kW: DỪNG (Q1.0 = FALSE)\n' +
+              '  + Đầu cắt Schürfrad: DỪNG (M20.1 = 0, M20.2 = 0)\n' +
+              '  + Trạm kích đẩy chính: DỪNG (Q16.2 = 0, Q17.2 = 0)\n' +
+              '  + Bơm xối nước & bùn: DỪNG (Q48.0 = 0, Q73.0 = 0)\n' +
+              'Nhấp lại nút E-STOP để xoay nhả chốt an toàn.');
+      } else {
+        if (mushroom) mushroom.classList.remove('tripped');
+        if (badge) {
+          badge.textContent = 'FC61: FREIGABE OK';
+          badge.style.background = 'rgba(0, 230, 118, 0.2)';
+          badge.style.borderColor = '#00e676';
+          badge.style.color = '#00e676';
+        }
+        alert('✅ ĐÃ RESET KHÓA DỪNG KHẨN CẤP (+pult-S3.3):\n' +
+              '- Tiếp điểm an toàn I0.0 ĐÃ ĐÓNG (TRUE).\n' +
+              '- Mạch an toàn FC61 khôi phục cờ Freigabe M61.0 = TRUE.\n' +
+              '- Hệ thống đã sẵn sàng cho phép khởi động lại trạm bơm chính (Item 05).');
       }
-    
-      if (itemNum === 1) { // Bypass Open
+    }
+
+    function actuateFigItem(itemNum) {
+      itemNum = parseInt(itemNum);
+
+      // E-STOP Blocking Check (except OFF/STOP buttons which are always permitted)
+      const isOffCommand = (itemNum === 2 || itemNum === 4 || itemNum === 6 || itemNum === 9 || itemNum === 16 || itemNum === 22 || itemNum === 28 || itemNum === 31);
+      if (eStopTripped && !isOffCommand) {
+        alert('CẢNH BÁO KHÓA LIÊN ĐỘNG AN TOÀN (PLC FC61):\nNút Dừng khẩn cấp (+pult-S3.3) đang bị kích hoạt!\nKhông thể bật bất kỳ cơ cấu chấp hành nào. Hãy nhấn xoay nhả nút E-STOP (Item 00) trước.');
+        return;
+      }
+
+      // --- ROW 1: SLURRY VALVES & HYDRAULIC POWERPACK (ITEMS 01-09) ---
+
+      if (itemNum === 1) { // Item 01: -S2.9 (EB67) Bypass Open
+        // Safety Interlock check with VisAM
+        if (typeof visamRealState !== 'undefined' && !visamRealState.unlockBypassJet) {
+          alert('CẢNH BÁO LIÊN ĐỘNG AN TOÀN (SAFETY INTERLOCK FC61):\nNút "Unlock Bypass-Jet" trên màn hình VisAM đang KHÓA (Màu Đỏ)!\nHãy chạm mở khóa trên màn hình VisAM trước khi mở van Bypass để tránh tụt áp buồng đào.');
+          return;
+        }
         bypassOpen = true;
+        jetOpen = false;
+        jetActive = false;
+        
+        // Panel LED states
         const b1 = document.getElementById('btnFig01');
         const b2 = document.getElementById('btnFig02');
+        const b3 = document.getElementById('btnFig03');
+        const b4 = document.getElementById('btnFig04');
         if (b1) b1.classList.add('active-cyan');
         if (b2) b2.classList.remove('active-yellow');
+        if (b3) b3.classList.remove('active-cyan');
+        if (b4) b4.classList.add('active-yellow');
+        
+        applyVisamSlurryMode('BYPASS');
         updateVisamValves();
-      } else if (itemNum === 2) { // Bypass Closed
+
+      } else if (itemNum === 2) { // Item 02: -S2.8 (EB68) Bypass Closed (Slurry Mode)
         bypassOpen = false;
+        jetOpen = false;
+        jetActive = false;
+
         const b1 = document.getElementById('btnFig01');
         const b2 = document.getElementById('btnFig02');
         if (b1) b1.classList.remove('active-cyan');
         if (b2) b2.classList.add('active-yellow');
+
+        applyVisamSlurryMode('SLURRY');
         updateVisamValves();
-      } else if (itemNum === 3) { // Jet Open
+
+      } else if (itemNum === 3) { // Item 03: -S2.7 (EB69) Jet Open
+        if (typeof visamRealState !== 'undefined' && !visamRealState.unlockBypassJet) {
+          alert('CẢNH BÁO LIÊN ĐỘNG AN TOÀN (SAFETY INTERLOCK FC61):\nNút "Unlock Bypass-Jet" trên màn hình VisAM đang KHÓA!\nHãy chạm mở khóa trên màn hình VisAM trước khi kích hoạt béc phun Water Jet.');
+          return;
+        }
         jetOpen = true;
         jetActive = true;
+
         const b3 = document.getElementById('btnFig03');
         const b4 = document.getElementById('btnFig04');
         if (b3) b3.classList.add('active-cyan');
         if (b4) b4.classList.remove('active-yellow');
+
+        applyVisamSlurryMode('JET');
         updateVisamValves();
-      } else if (itemNum === 4) { // Jet Closed
+
+      } else if (itemNum === 4) { // Item 04: -S2.6 (EB70) Jet Closed
         jetOpen = false;
         jetActive = false;
+
         const b3 = document.getElementById('btnFig03');
         const b4 = document.getElementById('btnFig04');
         if (b3) b3.classList.remove('active-cyan');
         if (b4) b4.classList.add('active-yellow');
+
+        applyVisamSlurryMode(bypassOpen ? 'BYPASS' : 'SLURRY');
         updateVisamValves();
-      } else if (itemNum === 5) { // Main Engine ON
+
+      } else if (itemNum === 5) { // Item 05: -S2.5 (EB71) Hydr Main ON
         mainEngineRunning = true;
         const b5 = document.getElementById('btnFig05');
         const b6 = document.getElementById('btnFig06');
         if (b5) b5.classList.add('active-green');
         if (b6) b6.classList.remove('active-red');
-        const v = document.getElementById('visamMainEng');
-        if (v) { v.innerText = 'RUNNING (145A)'; v.style.color = '#00e676'; }
-      } else if (itemNum === 6) { // Main Engine OFF
+        
+        if (typeof visamRealState !== 'undefined') {
+          var pphTemp = document.getElementById('dispHydrPph');
+          if (pphTemp) pphTemp.textContent = '42,50 [°C]';
+        }
+
+      } else if (itemNum === 6) { // Item 06: -S2.4 (EB72) Main OFF / Fail
         mainEngineRunning = false;
+        // Tripping main hydraulic halts cutter and jacking
+        actuateFigItem(28); // Stop cutter
+        actuateFigItem(31); // Stop jacking
+
         const b5 = document.getElementById('btnFig05');
         const b6 = document.getElementById('btnFig06');
         if (b5) b5.classList.remove('active-green');
         if (b6) b6.classList.add('active-red');
-        const v = document.getElementById('visamMainEng');
-        if (v) { v.innerText = 'OFF (0A)'; v.style.color = '#ff3d71'; }
-      } else if (itemNum === 8) { // Charge Pump ON
+
+        if (typeof visamRealState !== 'undefined') {
+          var pphTemp = document.getElementById('dispHydrPph');
+          if (pphTemp) pphTemp.textContent = '28,00 [°C]';
+        }
+
+      } else if (itemNum === 8) { // Item 08: -S2.3 (EB73) Charge Pump ON
         chargePumpRunning = true;
         const b8 = document.getElementById('btnFig08');
         const b9 = document.getElementById('btnFig09');
         if (b8) b8.classList.add('active-green');
         if (b9) b9.classList.remove('active-red');
+        
+        var p1 = document.getElementById('dispPumpRpm1');
+        if (p1) p1.textContent = '980';
         updateVisamFlows();
-      } else if (itemNum === 9) { // Charge Pump OFF
+
+      } else if (itemNum === 9) { // Item 09: -S2.2 (EB74) Charge Pump OFF
         chargePumpRunning = false;
         const b8 = document.getElementById('btnFig08');
         const b9 = document.getElementById('btnFig09');
         if (b8) b8.classList.remove('active-green');
         if (b9) b9.classList.add('active-red');
+        
+        var p1 = document.getElementById('dispPumpRpm1');
+        if (p1) p1.textContent = '0';
         updateVisamFlows();
-      } else if (itemNum === 15) { // Feed Pump ON
+
+      // --- ROW 2: FEED PUMP (ITEMS 15-16) ---
+
+      } else if (itemNum === 15) { // Item 15: -S2.16 (EB76) Feed Pump ON
         feedPumpRunning = true;
         const b15 = document.getElementById('btnFig15');
         const b16 = document.getElementById('btnFig16');
         if (b15) b15.classList.add('active-green');
         if (b16) b16.classList.remove('active-red');
+
+        var p2 = document.getElementById('dispPumpRpm2');
+        if (p2) p2.textContent = '920';
         updateVisamFlows();
-      } else if (itemNum === 16) { // Feed Pump OFF
+
+      } else if (itemNum === 16) { // Item 16: -S2.17 (EB75) Feed Pump OFF
         feedPumpRunning = false;
         const b15 = document.getElementById('btnFig15');
         const b16 = document.getElementById('btnFig16');
         if (b15) b15.classList.remove('active-green');
         if (b16) b16.classList.add('active-red');
+
+        var p2 = document.getElementById('dispPumpRpm2');
+        if (p2) p2.textContent = '0';
         updateVisamFlows();
-      } else if (itemNum === 21) { // Additional Pump ON
+
+      // --- ROW 3: ADDITION / BOOSTER PUMP (ITEMS 21-22) ---
+
+      } else if (itemNum === 21) { // Item 21: -S2.19 (EB77) Addition ON
         boosterPumpRunning = true;
         const b21 = document.getElementById('btnFig21');
         const b22 = document.getElementById('btnFig22');
         if (b21) b21.classList.add('active-green');
         if (b22) b22.classList.remove('active-red');
-      } else if (itemNum === 22) { // Additional Pump OFF
+
+        var p3 = document.getElementById('dispPumpRpm3');
+        if (p3) p3.textContent = '750';
+
+      } else if (itemNum === 22) { // Item 22: -S2.18 (EB78) Add OFF / Reset
         boosterPumpRunning = false;
         const b21 = document.getElementById('btnFig21');
         const b22 = document.getElementById('btnFig22');
         if (b21) b21.classList.remove('active-green');
         if (b22) b22.classList.add('active-red');
-      } else if (itemNum === 27) { // Cutter LEFT
+
+        var p3 = document.getElementById('dispPumpRpm3');
+        if (p3) p3.textContent = '0';
+
+      // --- ROW 5: CUTTERHEAD ROTATION (ITEMS 27-29) ---
+
+      } else if (itemNum === 27) { // Item 27: -S2.33 (EB92) Disc Left (CCW)
+        if (!mainEngineRunning) {
+          alert('LIÊN ĐỘNG AN TOÀN FC14/FC25:\nĐộng cơ thủy lực chính 132kW chưa bật (Item 05)!\nKhông thể cấp dầu quay đĩa cắt.');
+          return;
+        }
+        if (cuttingDiscState === 'CW') {
+          alert('LIÊN ĐỘNG KHÓA CHÉO FC25 (DIRECTION INTERLOCK):\nĐĩa cắt đang quay phải (CW)! Hãy nhấn nút DỪNG (Item 28) trước khi đảo chiều sang quay trái để bảo vệ hộp giảm tốc và bộ truyền động 200kW.');
+          return;
+        }
         cuttingDiscState = 'LEFT';
-        cutterSpeed = -3.8;
+        cutterSpeed = -4.5;
+        
         const b27 = document.getElementById('btnFig27');
         const b28 = document.getElementById('btnFig28');
         const b29 = document.getElementById('btnFig29');
         if (b27) b27.classList.add('active-yellow');
         if (b28) b28.classList.remove('active-red');
         if (b29) b29.classList.remove('active-green');
-        const vc = document.getElementById('visamCutterDir');
-        if (vc) vc.innerText = 'LEFT (CCW)';
-      } else if (itemNum === 28) { // Cutter STOP
+
+        if (typeof visamRealState !== 'undefined') {
+          visamRealState.cutterRev = 4.5;
+          visamRealState.cutterDir = 'LEFT';
+          visamRealState.cutterPres = 280.0;
+          var lampL = document.getElementById('lampCutterLeft');
+          var lampR = document.getElementById('lampCutterRight');
+          var barC = document.getElementById('barCutterRev');
+          if (lampL) lampL.className = 'visam-p-led-dot green';
+          if (lampR) lampR.className = 'visam-p-led-dot';
+          if (barC) barC.style.width = '75%';
+          updateVisamTelemetryDOM();
+        }
+
+      } else if (itemNum === 28) { // Item 28: -S2.32 (EB91) Disc STOP
         cuttingDiscState = 'STOP';
         cutterSpeed = 0.0;
+
         const b27 = document.getElementById('btnFig27');
         const b28 = document.getElementById('btnFig28');
         const b29 = document.getElementById('btnFig29');
         if (b27) b27.classList.remove('active-yellow');
         if (b28) b28.classList.add('active-red');
         if (b29) b29.classList.remove('active-green');
-        const vc = document.getElementById('visamCutterDir');
-        if (vc) vc.innerText = 'STOPPED';
-        const vr = document.getElementById('visamCutterRpm');
-        if (vr) vr.innerText = '0.0 RPM';
-      } else if (itemNum === 29) { // Cutter RIGHT
+
+        if (typeof visamRealState !== 'undefined') {
+          visamRealState.cutterRev = 0.0;
+          visamRealState.cutterDir = 'STOP';
+          visamRealState.cutterPres = 24.6;
+          var lampL = document.getElementById('lampCutterLeft');
+          var lampR = document.getElementById('lampCutterRight');
+          var barC = document.getElementById('barCutterRev');
+          if (lampL) lampL.className = 'visam-p-led-dot';
+          if (lampR) lampR.className = 'visam-p-led-dot';
+          if (barC) barC.style.width = '0%';
+          updateVisamTelemetryDOM();
+        }
+
+        // FC20 Safety cascade: In Auto mode, if jacks are advancing, halt jacks when cutter stops
+        if (jackingState === 'ADV' && typeof steerCylStates !== 'undefined' && steerCylStates[25] === 'up') {
+          actuateFigItem(31);
+        }
+
+      } else if (itemNum === 29) { // Item 29: -S2.31 (EB90) Disc Right (CW)
+        if (!mainEngineRunning) {
+          alert('LIÊN ĐỘNG AN TOÀN FC14/FC25:\nĐộng cơ thủy lực chính 132kW chưa bật (Item 05)!\nKhông thể cấp dầu quay đĩa cắt.');
+          return;
+        }
+        if (cuttingDiscState === 'LEFT') {
+          alert('LIÊN ĐỘNG KHÓA CHÉO FC25 (DIRECTION INTERLOCK):\nĐĩa cắt đang quay trái (CCW)! Hãy nhấn nút DỪNG (Item 28) trước khi đảo chiều sang quay phải.');
+          return;
+        }
         cuttingDiscState = 'CW';
-        cutterSpeed = 3.8;
+        cutterSpeed = 4.5;
+
         const b27 = document.getElementById('btnFig27');
         const b28 = document.getElementById('btnFig28');
         const b29 = document.getElementById('btnFig29');
         if (b27) b27.classList.remove('active-yellow');
         if (b28) b28.classList.remove('active-red');
         if (b29) b29.classList.add('active-green');
-        const vc = document.getElementById('visamCutterDir');
-        if (vc) vc.innerText = 'RIGHT (CW)';
-      } else if (itemNum === 30) { // Jacking Forward
+
+        if (typeof visamRealState !== 'undefined') {
+          visamRealState.cutterRev = 4.5;
+          visamRealState.cutterDir = 'RIGHT';
+          visamRealState.cutterPres = 275.0;
+          var lampL = document.getElementById('lampCutterLeft');
+          var lampR = document.getElementById('lampCutterRight');
+          var barC = document.getElementById('barCutterRev');
+          if (lampL) lampL.className = 'visam-p-led-dot';
+          if (lampR) lampR.className = 'visam-p-led-dot green';
+          if (barC) barC.style.width = '75%';
+          updateVisamTelemetryDOM();
+        }
+
+      // --- ROW 5: MAIN JACKING THRUST (ITEMS 30-32) ---
+
+      } else if (itemNum === 30) { // Item 30: -S2.30 (EB89) Jacks Forward (Adv)
+        if (!mainEngineRunning) {
+          alert('LIÊN ĐỘNG AN TOÀN FC20/FC61:\nĐộng cơ thủy lực chính 132kW chưa bật (Item 05)!\nKhông có áp suất bơm kích đẩy.');
+          return;
+        }
+        if (typeof steerCylStates !== 'undefined' && steerCylStates[26] === 'up') {
+          alert('LIÊN ĐỘNG CƠ KHÍ FC20 (CYLINDER LOCK):\nChốt khóa xilanh bàn đẩy (Item 26 - Cylinder Lock) đang ở vị trí KHÓA (LOCKED)!\nHãy nhả khóa cơ khí trước khi kích tiến.');
+          return;
+        }
+        if (cuttingDiscState === 'STOP' && typeof steerCylStates !== 'undefined' && steerCylStates[25] === 'up') {
+          alert('LIÊN ĐỘNG AN TOÀN FC20 (SCHÜRFRAD INTERLOCK):\nỞ chế độ kích tự động (Auto Mode), đĩa cắt mâm khoan PHẢI ĐANG QUAY trước khi kích tiến!\nKhởi động quay đĩa cắt (Item 27 hoặc Item 29), hoặc chuyển Item 25 sang chế độ Manual để thử kích không tải.');
+          return;
+        }
+        if (jackingState === 'RET') {
+          alert('LIÊN ĐỘNG ĐẢO CHIỀU FC20:\nXilanh kích đang trong hành trình lùi! Nhấn DỪNG (Item 31) trước khi đổi sang kích tiến.');
+          return;
+        }
+
         jackingState = 'ADV';
         const b30 = document.getElementById('btnFig30');
         const b31 = document.getElementById('btnFig31');
@@ -9868,9 +10088,17 @@
         if (b30) b30.classList.add('active-green');
         if (b31) b31.classList.remove('active-red');
         if (b32) b32.classList.remove('active-yellow');
-        const vj = document.getElementById('visamJackStatus');
-        if (vj) vj.innerText = 'ADVANCING';
-      } else if (itemNum === 31) { // Jacking STOP
+
+        if (typeof visamRealState !== 'undefined') {
+          visamRealState.driveActive = true;
+          visamRealState.jackingForce = 220.0;
+          visamRealState.driveSpeed = 2.40;
+          var barJ = document.getElementById('barJackForce');
+          if (barJ) barJ.style.width = '68%';
+          updateVisamTelemetryDOM();
+        }
+
+      } else if (itemNum === 31) { // Item 31: -S2.29 (EB88) Jacks STOP
         jackingState = 'STOP';
         const b30 = document.getElementById('btnFig30');
         const b31 = document.getElementById('btnFig31');
@@ -9878,9 +10106,30 @@
         if (b30) b30.classList.remove('active-green');
         if (b31) b31.classList.add('active-red');
         if (b32) b32.classList.remove('active-yellow');
-        const vj = document.getElementById('visamJackStatus');
-        if (vj) vj.innerText = 'STOPPED';
-      } else if (itemNum === 32) { // Jacking Back
+
+        if (typeof visamRealState !== 'undefined') {
+          visamRealState.driveActive = false;
+          visamRealState.jackingForce = 0.0;
+          visamRealState.driveSpeed = 0.00;
+          var barJ = document.getElementById('barJackForce');
+          if (barJ) barJ.style.width = '0%';
+          updateVisamTelemetryDOM();
+        }
+
+      } else if (itemNum === 32) { // Item 32: -S2.28 (EB87) Jacks Back (Ret)
+        if (!mainEngineRunning) {
+          alert('LIÊN ĐỘNG AN TOÀN FC20:\nĐộng cơ thủy lực chính chưa bật! Không thể thu xilanh kích.');
+          return;
+        }
+        if (typeof steerCylStates !== 'undefined' && steerCylStates[26] === 'up') {
+          alert('LIÊN ĐỘNG CƠ KHÍ FC20 (CYLINDER LOCK):\nChốt khóa xilanh bàn đẩy đang KHÓA! Hãy gạt Item 26 xuống UNLOCKED.');
+          return;
+        }
+        if (jackingState === 'ADV') {
+          alert('LIÊN ĐỘNG ĐẢO CHIỀU FC20:\nXilanh kích đang tiến! Nhấn DỪNG (Item 31) trước khi đổi sang thu kích.');
+          return;
+        }
+
         jackingState = 'RET';
         const b30 = document.getElementById('btnFig30');
         const b31 = document.getElementById('btnFig31');
@@ -9888,11 +10137,19 @@
         if (b30) b30.classList.remove('active-green');
         if (b31) b31.classList.remove('active-red');
         if (b32) b32.classList.add('active-yellow');
-        const vj = document.getElementById('visamJackStatus');
-        if (vj) vj.innerText = 'RETRACTING';
+
+        if (typeof visamRealState !== 'undefined') {
+          visamRealState.driveActive = true;
+          visamRealState.jackingForce = 45.0;
+          visamRealState.driveSpeed = 1.80;
+          var barJ = document.getElementById('barJackForce');
+          if (barJ) barJ.style.width = '18%';
+          updateVisamTelemetryDOM();
+        }
       }
     }
 
+    // --- POTENTIOMETERS UPDATE (ITEMS 07, 14, 17, 18, 19, 20) ---
     function updateFigPoti(itemNum, val) {
       val = parseFloat(val);
       const valEl = document.getElementById('valFig' + (itemNum < 10 ? '0' + itemNum : itemNum));
@@ -9911,31 +10168,34 @@
         if (knob) knob.style.transform = 'rotate(' + (val * 45 - 135) + 'deg)';
         if (cuttingDiscState !== 'STOP') {
           cutterSpeed = (cuttingDiscState === 'LEFT' ? -1 : 1) * val;
-          const vr = document.getElementById('visamCutterRpm');
-          if (vr) vr.innerText = val + ' RPM';
+          if (typeof visamRealState !== 'undefined') {
+            visamRealState.cutterRev = val;
+            updateVisamTelemetryDOM();
+          }
         }
       } else if (itemNum === 18) { // Jacking speed (0-50 mm/min)
         if (valEl) valEl.innerText = val + ' mm/min';
         if (knob) knob.style.transform = 'rotate(' + (val * 5.4 - 135) + 'deg)';
-        const vjs = document.getElementById('visamJackSpeed');
-        if (vjs) vjs.innerText = val + ' mm/min';
-        if (typeof jackSpeedPct !== 'undefined') {
-          jackSpeedPct = Math.round((val / 50) * 100);
+        if (typeof visamRealState !== 'undefined') {
+          visamRealState.driveSpeed = val / 10;
+          updateVisamTelemetryDOM();
         }
       } else if (itemNum === 19) { // Jacking pressure (50-400 bar)
         if (valEl) valEl.innerText = val + ' bar';
         if (knob) knob.style.transform = 'rotate(' + ((val - 50) * 0.77 - 135) + 'deg)';
-        const vjp = document.getElementById('visamJackPres');
-        const vjf = document.getElementById('visamJackForce');
-        if (vjp) vjp.innerText = val + ' bar';
-        if (vjf) vjf.innerText = Math.round(val * 1.34) + ' ton';
+        if (typeof visamRealState !== 'undefined') {
+          visamRealState.jackingForce = Math.round(val * 1.34);
+          updateVisamTelemetryDOM();
+        }
       } else if (itemNum === 20) { // Addition speed
         if (valEl) valEl.innerText = val + '%';
         if (knob) knob.style.transform = 'rotate(' + (val * 2.7 - 135) + 'deg)';
       }
     }
 
+    // --- ROCKER SWITCHES (ITEMS 10, 11, 12, 13, 24, 25, 26) ---
     function cycleRocker(itemNum) {
+      itemNum = parseInt(itemNum);
       const el = document.getElementById('rockerFig' + itemNum);
       const states = ['up', 'mid', 'down'];
       const cur = steerCylStates[itemNum] || 'mid';
@@ -9948,28 +10208,95 @@
         el.classList.add('state-' + next);
       }
 
-      // Deflect TACS laser on steer toggle
-      if (typeof laserOffsetY !== 'undefined' && itemNum === 10) laserOffsetY = next === 'up' ? -8 : (next === 'down' ? 8 : 2.1);
-      if (typeof laserOffsetX !== 'undefined' && itemNum === 11) laserOffsetX = next === 'up' ? 8 : (next === 'down' ? -8 : -1.5);
-      if (itemNum === 26) {
-        const isLocked = next !== 'down';
-        const vls = document.getElementById('visamLockStatus');
-        if (vls) {
-          vls.innerText = isLocked ? '🔒 LOCKED' : '🔓 UNLOCKED';
-          vls.style.color = isLocked ? '#00e676' : '#ff9100';
+      // Live sync to VisAM 17" Screen:
+      if (itemNum === 10) { // Item 10: -S2.10 (EB66) Steer Ram 1 (Top/Right 0°)
+        var r1 = document.getElementById('dispRam1');
+        var h1 = document.getElementById('handleRam1');
+        var vDev = document.getElementById('dispVertDev');
+        if (next === 'up') {
+          if (r1) r1.textContent = '12,5';
+          if (h1) h1.style.bottom = '80%';
+          if (vDev) vDev.textContent = '315,00';
+        } else if (next === 'down') {
+          if (r1) r1.textContent = '-15,0';
+          if (h1) h1.style.bottom = '15%';
+          if (vDev) vDev.textContent = '285,00';
+        } else {
+          if (r1) r1.textContent = '1,3';
+          if (h1) h1.style.bottom = '50%';
+          if (vDev) vDev.textContent = '301,00';
         }
+      } else if (itemNum === 11) { // Item 11: -S2.11 (EB65) Steer Ram 2 (Left 120°)
+        var r2 = document.getElementById('dispRam2');
+        var h2 = document.getElementById('handleRam2');
+        var hDev = document.getElementById('dispHorizDev');
+        if (next === 'up') {
+          if (r2) r2.textContent = '8,0';
+          if (h2) h2.style.bottom = '70%';
+          if (hDev) hDev.textContent = '318,00';
+        } else if (next === 'down') {
+          if (r2) r2.textContent = '-18,5';
+          if (h2) h2.style.bottom = '10%';
+          if (hDev) hDev.textContent = '282,00';
+        } else {
+          if (r2) r2.textContent = '-9,8';
+          if (h2) h2.style.bottom = '25%';
+          if (hDev) hDev.textContent = '300,00';
+        }
+      } else if (itemNum === 12) { // Item 12: -S2.12 (EB64) Steer Ram 3 (Right 240°)
+        var r3 = document.getElementById('dispRam3');
+        var h3 = document.getElementById('handleRam3');
+        var hRoll = document.getElementById('dispHeadRoll');
+        if (next === 'up') {
+          if (r3) r3.textContent = '6,5';
+          if (h3) h3.style.bottom = '65%';
+          if (hRoll) hRoll.textContent = '+1,20';
+        } else if (next === 'down') {
+          if (r3) r3.textContent = '-14,2';
+          if (h3) h3.style.bottom = '18%';
+          if (hRoll) hRoll.textContent = '-1,50';
+        } else {
+          if (r3) r3.textContent = '-7,5';
+          if (h3) h3.style.bottom = '30%';
+          if (hRoll) hRoll.textContent = '0,00';
+        }
+      } else if (itemNum === 13) { // Item 13: -S2.13 (EB63) Fin Extend (Cánh chống xoay Wing)
+        var wStroke = document.getElementById('dispWingStroke');
+        if (next === 'up') {
+          if (wStroke) wStroke.textContent = '45,0';
+          alert('CÁNH CHỐNG XOAY (-S2.13 WING):\nĐã bung cánh thép ghim vào vách địa chất (Stroke: 45mm)!');
+        } else if (next === 'down') {
+          if (wStroke) wStroke.textContent = '0,0';
+          alert('CÁNH CHỐNG XOAY (-S2.13 WING):\nĐã thu gọn cánh về sát thân khiên (Stroke: 0mm)!');
+        } else {
+          if (wStroke) wStroke.textContent = '15,0';
+        }
+      } else if (itemNum === 24) { // Item 24: -S2.21 (EB80) Single Cylinders Mode
+        alert('CHẾ ĐỘ KÍCH (-S2.21): ' + (next === 'up' ? 'BẬT KÍCH ĐƠN TỪNG XILANH' : 'KÍCH TIẾN ĐỒNG THỜI 4 XILANH'));
+      } else if (itemNum === 25) { // Item 25: -S2.22 (EB81) Mode Jacking
+        alert('CHẾ ĐỘ KÍCH (-S2.22): ' + (next === 'up' ? 'KÍCH TỰ ĐỘNG THEO CHU TRÌNH' : 'KÍCH BẰNG TAY (MANUAL)'));
+      } else if (itemNum === 26) { // Item 26: -S2.23 (EB82) Cylinder Lock (Khóa cơ khí bàn đẩy)
+        const isLocked = next !== 'down';
+        if (typeof visamRealState !== 'undefined') {
+          visamRealState.lockCyl = isLocked;
+        }
+        var lampLock = document.getElementById('lampLockCyl');
+        if (lampLock) {
+          lampLock.className = isLocked ? 'visam-p-led-dot orange' : 'visam-p-led-dot green';
+        }
+        alert('KHÓA BÀN ĐẨY (-S2.23 CYLINDER LOCK): ' + (isLocked ? '🔒 ĐÃ KHÓA (LOCKED)' : '🔓 ĐÃ MỞ KHÓA (UNLOCKED)'));
       }
     }
 
+    // --- ROTARY SELECTOR (ITEM 23) ---
     function cycleSelector23() {
       flushModeIdx = (flushModeIdx + 1) % flushModes.length;
       const mode = flushModes[flushModeIdx];
       const valEl = document.getElementById('valFig23');
-      const visMode = document.getElementById('visamMode');
       const knob = document.getElementById('knobFig23');
       if (valEl) valEl.innerText = mode;
-      if (visMode) visMode.innerText = 'MODE: ' + mode;
       if (knob) knob.style.transform = 'rotate(' + (flushModeIdx * 45) + 'deg)';
+      alert('CHẾ ĐỘ XỐI RỬA (-S2.20 FLUSHING MODE): ' + mode);
     }
 
     function updateVisamValves() {
@@ -12052,34 +12379,44 @@ function operatePanelFromVisam(btnId) {
 
 // Update the Slurry Mimic Graphic & Telemetry Based on Valve State
 function applyVisamSlurryMode(mode) {
+  if (typeof visamRealState === 'undefined') return;
   visamRealState.slurryMode = mode;
-  var pBypass = document.getElementById('pipeBypassVertical');
-  var pFeed = document.getElementById('pipeFeed');
-  var pDischarge = document.getElementById('pipeDischarge');
-  var pChamberIn = document.getElementById('pipeChamberIn');
-  var pChamberOut = document.getElementById('pipeChamberOut');
-  var jetSpray = document.getElementById('jetSprayEffect');
+  
+  // Photo-exact SVG pipe elements
+  var pFeed = document.getElementById('svgPipeFeed');
+  var pDischarge = document.getElementById('svgPipeDischarge');
+  var pBypass = document.getElementById('svgPipeBypass');
+  var pRightTop = document.getElementById('svgPipeRightTop');
+  var pRightVert = document.getElementById('svgPipeRightVert');
+  var pRightBot = document.getElementById('svgPipeRightBot');
+  var jetSprays = document.getElementById('svgJetSprays');
 
   if (mode === 'BYPASS') {
-    if (pBypass) { pBypass.className = 'visam-pipe-line active-slurry'; }
-    if (pChamberIn) { pChamberIn.className = 'visam-pipe-line inactive'; }
-    if (pChamberOut) { pChamberOut.className = 'visam-pipe-line inactive'; }
-    if (jetSpray) { jetSpray.style.display = 'none'; }
+    if (pBypass) pBypass.setAttribute('fill', '#16a34a'); // Bypass Green (Active)
+    if (pRightTop) pRightTop.setAttribute('fill', '#64748b'); // Chamber Inactive
+    if (pRightVert) pRightVert.setAttribute('fill', '#64748b');
+    if (pRightBot) pRightBot.setAttribute('fill', '#64748b');
+    if (jetSprays) jetSprays.style.display = 'none';
     visamRealState.chamberPres = 0.1;
     visamRealState.linePres = -1.0;
     visamRealState.slurryFlow = 45;
+
   } else if (mode === 'SLURRY') {
-    if (pBypass) { pBypass.className = 'visam-pipe-line inactive'; }
-    if (pChamberIn) { pChamberIn.className = 'visam-pipe-line active-slurry'; }
-    if (pChamberOut) { pChamberOut.className = 'visam-pipe-line active-discharge'; }
-    if (jetSpray) { jetSpray.style.display = 'none'; }
+    if (pBypass) pBypass.setAttribute('fill', '#334155'); // Bypass Closed
+    if (pRightTop) pRightTop.setAttribute('fill', '#16a34a'); // Chamber Active Feed
+    if (pRightVert) pRightVert.setAttribute('fill', '#16a34a');
+    if (pRightBot) pRightBot.setAttribute('fill', '#ea580c'); // Discharge Active Orange
+    if (jetSprays) jetSprays.style.display = 'none';
     visamRealState.chamberPres = 1.85;
     visamRealState.linePres = 2.4;
     visamRealState.slurryFlow = 120;
+
   } else if (mode === 'JET') {
-    if (pBypass) { pBypass.className = 'visam-pipe-line inactive'; }
-    if (pChamberIn) { pChamberIn.className = 'visam-pipe-line active-slurry'; }
-    if (jetSpray) { jetSpray.style.display = 'block'; }
+    if (pBypass) pBypass.setAttribute('fill', '#334155');
+    if (pRightTop) pRightTop.setAttribute('fill', '#16a34a');
+    if (pRightVert) pRightVert.setAttribute('fill', '#16a34a');
+    if (pRightBot) pRightBot.setAttribute('fill', '#ea580c');
+    if (jetSprays) jetSprays.style.display = 'block'; // Show water jets!
     visamRealState.chamberPres = 1.2;
     visamRealState.cutterPres = 18.2;
     visamRealState.slurryFlow = 85;
@@ -12144,7 +12481,18 @@ function toggleVisamSoftkey(key) {
     alert('Bơm cao áp Water Jet 400 bar: ' + (visamRealState.hdPump ? 'BẬT (ON)' : 'TẮT (OFF)'));
   } else if (key === 'lockCyl') {
     visamRealState.lockCyl = !visamRealState.lockCyl;
-    alert('Khóa xilanh bàn đẩy (Locking Cyl): ' + (visamRealState.lockCyl ? 'LOCKED' : 'UNLOCKED'));
+    const isLocked = visamRealState.lockCyl;
+    steerCylStates[26] = isLocked ? 'up' : 'down';
+    const rocker26 = document.getElementById('rockerFig26');
+    if (rocker26) {
+      rocker26.classList.remove('state-up', 'state-mid', 'state-down');
+      rocker26.classList.add('state-' + steerCylStates[26]);
+    }
+    var lampLock = document.getElementById('lampLockCyl');
+    if (lampLock) {
+      lampLock.className = isLocked ? 'visam-p-led-dot orange' : 'visam-p-led-dot green';
+    }
+    alert('Khóa xilanh bàn đẩy (Locking Cyl): ' + (isLocked ? '🔒 LOCKED' : '🔓 UNLOCKED'));
   } else if (key === 'pipeHold') {
     visamRealState.pipeHold = !visamRealState.pipeHold;
     alert('Phanh kẹp cống (Pipe Hold): ' + (visamRealState.pipeHold ? 'SET (KẸP CHẶT)' : 'RELEASE (NHẢ)'));
