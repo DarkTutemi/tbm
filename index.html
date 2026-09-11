@@ -3993,6 +3993,39 @@
                       <text x="315" y="479" fill="#e2e8f0" font-size="9.5">• -K2.1: Counter Tốc Độ</text>
                     </g>
 
+                    <!-- SECTION 6.5: 3x LOCKING CYLINDERS (=bk / =bt COUPLING HOOKS) -->
+                    <g class="component-node" onclick="showBkDetails('3x Xilanh Khóa Móc (=bk/=bt)', 'Cụm 3 xilanh khóa móc liên kết cơ khí - thủy lực (Locking Cylinders / Connecting Cylinders)', 'A53.6 (-K56 Lock) / A53.7 (-K57 Unlock)', 'Turck PicoNet -K2.3 (Port 4.4/4.2, DP-Adr. 25) | Giắc -X3.8 & -X11.3/-X11.8', 'Kéo gài chặt 3 đầu móc cơ khí ghép cứng Đầu cắt =bk với Xe kéo =bt khi thi công, hoặc rút chốt mở móc khi cần tách rời để bảo trì/thu hồi. Điều khiển qua nút -S2.23 (Item 26 Cabin) & phím VisAM Locking cyl.')">
+                      <!-- Interface Coupling Bulkhead Plate -X11.3/-X11.8 -->
+                      <rect x="702" y="140" width="8" height="320" rx="3" fill="#64748b" stroke="#cbd5e1" stroke-width="1"/>
+                      <text x="696" y="132" fill="#94a3b8" font-size="9" font-weight="bold" text-anchor="middle">VÁCH NỐI -X11</text>
+
+                      <!-- Top Locking Cylinder & Claw Hook (Hook 1) -->
+                      <rect x="680" y="175" width="30" height="16" rx="3" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="1.5"/>
+                      <path d="M 710 178 L 742 178 L 748 186 L 742 191 L 710 191 Z" fill="#22c55e" stroke="#86efac" stroke-width="1.5"/>
+                      <circle cx="742" cy="184" r="3.5" fill="#facc15"/>
+                      <text x="655" y="170" fill="#f87171" font-size="8.5" font-weight="bold">Móc 1 (Lock 1)</text>
+
+                      <!-- Center Locking Cylinder & Tow Bar (Hook 2 & Hitch) -->
+                      <rect x="680" y="292" width="30" height="16" rx="3" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="1.5"/>
+                      <path d="M 710 295 L 742 295 L 748 300 L 742 305 L 710 305 Z" fill="#22c55e" stroke="#86efac" stroke-width="1.5"/>
+                      <circle cx="742" cy="300" r="3.5" fill="#facc15"/>
+                      <text x="655" y="288" fill="#f87171" font-size="8.5" font-weight="bold">Móc 2 (Lock 2)</text>
+
+                      <!-- Bottom Locking Cylinder & Claw Hook (Hook 3) -->
+                      <rect x="680" y="405" width="30" height="16" rx="3" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="1.5"/>
+                      <path d="M 710 408 L 742 408 L 748 416 L 742 421 L 710 421 Z" fill="#22c55e" stroke="#86efac" stroke-width="1.5"/>
+                      <circle cx="742" cy="414" r="3.5" fill="#facc15"/>
+                      <text x="655" y="402" fill="#f87171" font-size="8.5" font-weight="bold">Móc 3 (Lock 3)</text>
+
+                      <!-- Solenoid Valve Control Block -K56 / -K57 -->
+                      <rect x="625" y="225" width="70" height="34" rx="4" fill="#0f172a" stroke="#d97706" stroke-width="1.5"/>
+                      <text x="630" y="238" fill="#f59e0b" font-size="8" font-weight="bold">-K56 Lock (A53.6)</text>
+                      <text x="630" y="252" fill="#38bdf8" font-size="8" font-weight="bold">-K57 Unlock (A53.7)</text>
+
+                      <!-- Connector Lines to Turck -K2.3 Port 4 -->
+                      <path d="M 460 465 L 625 242" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,3"/>
+                    </g>
+
                     <!-- SECTION 7: BACKUP TRAILER & ARTICULATION HITCH -->
                     <g class="component-node" onclick="showBkDetails('Backup Trailer (=ppm)', 'Khung Giàn Phụ Trợ Trailer Kéo Sau Khiên', 'Khớp kéo mềm, Máng cáp 900V, Cụm van thủy lực phụ trợ', 'Bơm bùn nạp/xả DN100/DN150, Biến áp Spartrafo 300kVA', 'Chạy trên bánh lăn dẫn hướng trong lòng cống bê tông DN2100')">
                       <!-- Articulation hitch connecting to rear shield -->
@@ -4081,6 +4114,10 @@
                   <span>Turck PicoNet Profibus I/O</span>
                 </div>
                 <div class="bk-legend-item">
+                  <div class="bk-color-dot" style="background: #ef4444;"></div>
+                  <span>3 Xilanh khóa móc (=bk/=bt)</span>
+                </div>
+                <div class="bk-legend-item">
                   <div class="bk-color-dot" style="background: #facc15;"></div>
                   <span>Giàn phụ trợ Trailer (=ppm)</span>
                 </div>
@@ -4106,6 +4143,11 @@
                     <tr><td><strong>-B242</strong></td><td>Cảm biến áp lực buồng đào bùn</td><td><span class="tag tag-analog">Analog 4-20mA</span></td><td>EW374 / PIW374 (0-10 bar)</td><td>-K1.1 (DP-Adr. 23)</td><td>85125</td></tr>
                     <tr><td><strong>-B244</strong></td><td>Cảm Biến Áp Suất Đĩa Cắt (-B244)</td><td><span class="tag tag-analog">Analog 4-20mA</span></td><td>EW378 / PIW378 (0-400 bar)</td><td>Trạm Turck PicoNet -K1.1 (Port 4, DP-Adr 23)</td><td>85125</td></tr>
                     <tr><td><strong>-K1..-K2</strong></td><td>Cụm Module I/O Turck PicoNet</td><td><span class="tag tag-counter">Profibus 12Mbps</span></td><td>DP-Adr. 20..30 (Mạng Bus =bk)</td><td>Hộp phân phối chính =bk</td><td>85070 / 85125</td></tr>
+                    <tr><td><strong>3x Locking Cyl.</strong></td><td>Cụm 3 xilanh khóa móc liên kết cơ khí - thủy lực (Connecting Cylinders)</td><td><span class="tag tag-valve">Thủy Lực 03/04</span></td><td>Ghép cứng / Tách rời =bk và =bt</td><td>Nối giữa đuôi =bk &amp; cổ =bt</td><td>MTS-Hydraulik</td></tr>
+                    <tr><td><strong>-K56</strong></td><td>Solenoid Khóa liên kết (Lock / Lock. cyl. out)</td><td><span class="tag tag-valve">Digital Output</span></td><td>A53.6 (24VDC)</td><td>Turck PicoNet -K2.3 (Port 4.4, DP-Adr. 25)</td><td>85070</td></tr>
+                    <tr><td><strong>-K57</strong></td><td>Solenoid Mở Khóa liên kết (Unlock / Lock. cyl. in)</td><td><span class="tag tag-valve">Digital Output</span></td><td>A53.7 (24VDC)</td><td>Turck PicoNet -K2.3 (Port 4.2, DP-Adr. 25)</td><td>85070</td></tr>
+                    <tr><td><strong>-X3.8 / -X11.3..8</strong></td><td>Tuyến giắc cắm M12 &amp; Cụm vách giắc cắm trung gian (=bk/=bt)</td><td><span class="tag tag-counter">Cáp -W3.4/-W11.3</span></td><td>Chuyển tiếp tín hiệu van khóa &amp; cảm biến</td><td>Vách phân ranh nối giữa =bk và =bt</td><td>Harting/M12</td></tr>
+                    <tr><td><strong>-S2.23 / VisAM</strong></td><td>Nút bấm Cabin (Item 26) &amp; Phím mềm màn hình VisAM (Locking cyl.)</td><td><span class="tag tag-digital">BEB82 / HMI</span></td><td>Lệnh chuyển đổi Lock / Unlock cho PLC</td><td>Bàn điều khiển =cc &amp; Màn hình IPC</td><td>Eaton/VisAM</td></tr>
                     <tr><td><strong>-B57</strong></td><td>Cảm biến độ nghiêng 2 trục (Inclinometer)</td><td><span class="tag tag-analog">Analog 4-20mA</span></td><td>EW370 / PIW370 (+/- 60°)</td><td>-K1.2 (DP-Adr. 22)</td><td>115223</td></tr>
                     <tr><td><strong>-B54..56</strong></td><td>Cảm biến áp suất xilanh lái 1, 2, 3</td><td><span class="tag tag-analog">Analog 4-20mA</span></td><td>EW364, EW366, EW368</td><td>-K1.2 (DP-Adr. 22)</td><td>85125</td></tr>
                     <tr><td><strong>-B62</strong></td><td>Công tắc hành trình van Bypass (Open/Close)</td><td><span class="tag tag-digital">Digital Input</span></td><td>E52.0 / E52.1</td><td>-K2.2 (DP-Adr. 24)</td><td>85070</td></tr>
@@ -10135,20 +10177,75 @@
       // 2. BACKUP TRAILER (=ppm) WITH 900V TRANSFORMER & SLURRY LINES
       // =========================================================================
       if (trailerX > pipeStartX) {
-        // Articulated towing link / hitch to TBM rear
-        ctx.strokeStyle = '#94a3b8';
-        ctx.lineWidth = 4;
-        ctx.beginPath();
-        ctx.moveTo(trailerX + trailerLen, tunnelMidY + 15);
-        ctx.lineTo(tailX, tunnelMidY + 15);
-        ctx.stroke();
+        // =====================================================================
+        // 3x LOCKING CYLINDERS (=bk / =bt COUPLING HOOKS)
+        // Solenoid -K56 (Lock / A53.6) & -K57 (Unlock / A53.7)
+        // Controlled by -S2.23 (Item 26 Cabin) & VisAM 'Locking cyl.'
+        // =====================================================================
+        const isLockEngaged = (typeof steerCylStates !== 'undefined' && steerCylStates[26] !== 'down');
+        const hitchStartX = trailerX + trailerLen;
+        const hitchEndX = tailX;
+        const hitchGap = hitchEndX - hitchStartX;
 
-        // Towing hitch pivots
-        ctx.fillStyle = '#f59e0b';
+        // Bulkhead interface plate -X11.3 / -X11.8 on TBM rear
+        ctx.fillStyle = '#64748b';
+        ctx.fillRect(tailX - 3, tunnelTop + 24, 3, tunnelHeight - 48);
+
+        // 3 Locking Cylinders & Claws: Top (1), Center (2), Bottom (3)
+        const lockYPositions = [
+          tunnelMidY - 26, // Hook 1 Top
+          tunnelMidY,      // Hook 2 Center / Main Drawbar
+          tunnelMidY + 26  // Hook 3 Bottom
+        ];
+
+        lockYPositions.forEach((ly, lIdx) => {
+          // Hydraulic cylinder barrel on TBM rear
+          ctx.fillStyle = '#334155';
+          ctx.fillRect(tailX - 15, ly - 4.5, 12, 9);
+          ctx.strokeStyle = isLockEngaged ? '#22c55e' : '#f59e0b';
+          ctx.lineWidth = 1.2;
+          ctx.strokeRect(tailX - 15, ly - 4.5, 12, 9);
+
+          // Piston rod & hook claw bridging gap
+          ctx.fillStyle = '#cbd5e1';
+          ctx.fillRect(tailX - 3, ly - 2, -(hitchGap - 3), 4);
+
+          // Hook Claws grasping trailer hitch lug
+          ctx.fillStyle = isLockEngaged ? '#22c55e' : '#eab308';
+          ctx.beginPath();
+          ctx.arc(hitchStartX + 3, ly, isLockEngaged ? 4.5 : 3.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          // Trailer receiver lug
+          ctx.fillStyle = '#475569';
+          ctx.beginPath();
+          ctx.arc(hitchStartX + 1, ly, 3, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Hydraulic Solenoid Valve Block -K56 / -K57
+        const solBoxX = tailX - 22;
+        const solBoxY = tunnelMidY - 14;
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(solBoxX, solBoxY, 18, 28);
+        ctx.strokeStyle = isLockEngaged ? '#22c55e' : '#f59e0b';
+        ctx.lineWidth = 1.2;
+        ctx.strokeRect(solBoxX, solBoxY, 18, 28);
+
+        // Status LED on valve block
+        ctx.fillStyle = isLockEngaged ? '#22c55e' : '#ef4444';
         ctx.beginPath();
-        ctx.arc(trailerX + trailerLen, tunnelMidY + 15, 4, 0, Math.PI * 2);
-        ctx.arc(tailX, tunnelMidY + 15, 4, 0, Math.PI * 2);
+        ctx.arc(solBoxX + 9, solBoxY + 7, 2.5, 0, Math.PI * 2);
         ctx.fill();
+
+        // Lock Status Badge Text
+        ctx.fillStyle = isLockEngaged ? '#4ade80' : '#facc15';
+        ctx.font = 'bold 7px "JetBrains Mono", monospace';
+        ctx.fillText(isLockEngaged ? 'LOCK' : 'UNLOCK', solBoxX - 1, solBoxY + 17);
+        ctx.fillText(isLockEngaged ? '-K56' : '-K57', solBoxX + 1, solBoxY + 25);
 
         // Trailer Main Sled Chassis (Steel Frame)
         const trTop = tunnelTop + 22;
