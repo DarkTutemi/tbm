@@ -3947,6 +3947,12 @@
                       <text x="190" y="445" fill="#38bdf8" font-size="11" font-weight="bold">P Slurry -B242</text>
                     </g>
 
+                    <!-- Cutter Pressure Sensor -B244 -->
+                    <g class="component-node" onclick="showBkDetails('Cảm Biến Áp Suất Đĩa Cắt (-B244)', 'Cảm biến đo áp suất thủy lực cấp cho động cơ quay mâm cắt.', 'EW378 / PIW378 (Dải đo 0-400 bar)', 'Trạm Turck PicoNet -K1.1 (Port 4, DP-Adr 23)', 'Giám sát tải trọng mô-men quay và tự động chống quá tải kẹt đá.')">
+                      <circle cx="240" cy="225" r="10" fill="#0284c7" stroke="#38bdf8" stroke-width="2"/>
+                      <text x="190" y="255" fill="#38bdf8" font-size="11" font-weight="bold">P Cutter -B244</text>
+                    </g>
+
                     <!-- SECTION 3: BYPASS & JET VALVE ASSEMBLY -->
                     <g class="component-node" onclick="showBkDetails('Bypass & Jet Valves (-K58..61)', 'Cụm Van Bùn Bypass & Jet', 'Coil: -K58/59 (Bypass A52.0/1), -K60/61 (Jet A52.2/3)', 'LS: -B62 (E52.0/1), -B64 (E52.2/3)', 'Chuyển đổi linh hoạt giữa chế độ tuần hoàn ngắn mạch và xối rửa tia nước cao áp')">
                       <rect x="305" y="135" width="155" height="150" rx="8" fill="#d97706" fill-opacity="0.15" stroke="#d97706" stroke-width="2"/>
@@ -3979,12 +3985,12 @@
                     </g>
 
                     <!-- SECTION 6: TURCK PICONET PROFIBUS IO MODULES -->
-                    <g class="component-node" onclick="showBkDetails('Turck PicoNet Modules', 'Trạm I/O Phân Tán Turck PicoNet IP67', 'Module -K1.1..1.4, -K2.1, -K2.2, -K2.3', 'Mạng Profibus-DP (12Mbps) truyền về PLC S7-300 Cabin', 'Thu thập cảm biến và xuất lệnh điều khiển van điện từ trên đầu khiên')">
+                    <g class="component-node" onclick="showBkDetails('Cụm Module I/O Turck PicoNet', 'Các module I/O phân tán đúc khối chuẩn chống nước IP67 thu thập toàn bộ cảm biến.', 'Mạng Profibus-DP 12Mbps / Địa chỉ DP-Adr 20 đến 30', 'Hộp phân phối chính =bk', 'Bao gồm các module: -K1.1..1.4 (AI/DO), -K2.1 (Counter), -K2.2..2.3 (DI/DO).')">
                       <rect x="305" y="405" width="155" height="95" rx="8" fill="#a855f7" fill-opacity="0.18" stroke="#a855f7" stroke-width="2"/>
                       <text x="315" y="426" fill="#c084fc" font-size="11" font-weight="bold">CỤM PICONET I/O</text>
-                      <text x="315" y="445" fill="#e2e8f0" font-size="9.5">• -K1.1..1.3: 4AI Analog</text>
-                      <text x="315" y="462" fill="#e2e8f0" font-size="9.5">• -K2.2..2.3: Digital I/O</text>
-                      <text x="315" y="479" fill="#e2e8f0" font-size="9.5">• -K2.1: Counter 2-Chan</text>
+                      <text x="315" y="445" fill="#e2e8f0" font-size="9.5">• -K1.1..1.4: AI/DO Analog</text>
+                      <text x="315" y="462" fill="#e2e8f0" font-size="9.5">• -K2.2..2.3: DI/DO Digital</text>
+                      <text x="315" y="479" fill="#e2e8f0" font-size="9.5">• -K2.1: Counter Tốc Độ</text>
                     </g>
 
                     <!-- SECTION 7: BACKUP TRAILER & ARTICULATION HITCH -->
@@ -4098,6 +4104,8 @@
                     <tr><td><strong>-M15.1</strong></td><td>Động cơ truyền động mâm cắt (132kW/900V)</td><td><span class="tag tag-valve">900V AC Drive</span></td><td>PQW268 (Tốc độ tỷ lệ)</td><td>Khởi động mềm Sirius -T15.1</td><td>176449</td></tr>
                     <tr><td><strong>-B1</strong></td><td>Cảm biến đếm tốc độ đĩa cắt (RPM)</td><td><span class="tag tag-counter">Counter</span></td><td>EW478 / EW483</td><td>-K2.1 (DP-Adr. 30)</td><td>85086</td></tr>
                     <tr><td><strong>-B242</strong></td><td>Cảm biến áp lực buồng đào bùn</td><td><span class="tag tag-analog">Analog 4-20mA</span></td><td>EW374 / PIW374 (0-10 bar)</td><td>-K1.1 (DP-Adr. 23)</td><td>85125</td></tr>
+                    <tr><td><strong>-B244</strong></td><td>Cảm Biến Áp Suất Đĩa Cắt (-B244)</td><td><span class="tag tag-analog">Analog 4-20mA</span></td><td>EW378 / PIW378 (0-400 bar)</td><td>Trạm Turck PicoNet -K1.1 (Port 4, DP-Adr 23)</td><td>85125</td></tr>
+                    <tr><td><strong>-K1..-K2</strong></td><td>Cụm Module I/O Turck PicoNet</td><td><span class="tag tag-counter">Profibus 12Mbps</span></td><td>DP-Adr. 20..30 (Mạng Bus =bk)</td><td>Hộp phân phối chính =bk</td><td>85070 / 85125</td></tr>
                     <tr><td><strong>-B57</strong></td><td>Cảm biến độ nghiêng 2 trục (Inclinometer)</td><td><span class="tag tag-analog">Analog 4-20mA</span></td><td>EW370 / PIW370 (+/- 60°)</td><td>-K1.2 (DP-Adr. 22)</td><td>115223</td></tr>
                     <tr><td><strong>-B54..56</strong></td><td>Cảm biến áp suất xilanh lái 1, 2, 3</td><td><span class="tag tag-analog">Analog 4-20mA</span></td><td>EW364, EW366, EW368</td><td>-K1.2 (DP-Adr. 22)</td><td>85125</td></tr>
                     <tr><td><strong>-B62</strong></td><td>Công tắc hành trình van Bypass (Open/Close)</td><td><span class="tag tag-digital">Digital Input</span></td><td>E52.0 / E52.1</td><td>-K2.2 (DP-Adr. 24)</td><td>85070</td></tr>
@@ -10469,6 +10477,20 @@
       ctx.font = 'bold 7.5px "JetBrains Mono", monospace';
       ctx.fillText('P -B242', frontX + 18, pB242Y - 10);
       ctx.fillText('1.85 bar', frontX + 16, pB242Y + 18);
+
+      // Cutter Pressure Sensor (-B244) with digital readout
+      const pB244Y = shTop + 38;
+      const b244Val = Math.round(140 + (cutterSpeedPct * 2.2));
+      ctx.fillStyle = '#0284c7';
+      ctx.beginPath();
+      ctx.arc(frontX + 35, pB244Y, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#38bdf8';
+      ctx.stroke();
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 7.5px "JetBrains Mono", monospace';
+      ctx.fillText('P -B244', frontX + 18, pB244Y - 10);
+      ctx.fillText(b244Val + ' bar', frontX + 16, pB244Y + 18);
 
       // Slurry Chamber (Buồng bùn & Nón nghiền Crusher Cone)
       const chX = frontX + 66;
